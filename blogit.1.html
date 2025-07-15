@@ -19,12 +19,11 @@
 </nav>
 <section>
 <h1 id="name">NAME</h1>
-<p>BlogIt</p>
+<p>blogit</p>
 <h1 id="synopsis">SYNOPSIS</h1>
-<p>BlogIt <a href="#options">OPTIONS</a> COMMON_MARK_FILE
-[DATE_OF_POST]</p>
+<p>blogit <a href="#options">OPTIONS</a> VERB COMMON_MARK_FILE</p>
 <h1 id="description">DESCRIPTION</h1>
-<p>BlogIt provides a means of currating front matter in a Common Mark or
+<p>blogit provides a means of currating front matter in a Common Mark or
 Markdown document. When you’re ready to publish (when the front matter
 validates) it’ll copy the document into a blog directory structure.</p>
 <h1 id="options">OPTIONS</h1>
@@ -46,19 +45,36 @@ display license
 <dd>
 Set an explicit path to the “blog” directory.
 </dd>
-<dt>check, –check, -c</dt>
+</dl>
+<p>VERB</p>
+<dl>
+<dt>config</dt>
+<dd>
+This will create a configuration file for default settings to use in the
+front matter.
+</dd>
+<dt>check</dt>
 <dd>
 check COMMON_MARK_FILE or directory PATH expected front matter reporting
 problems.
 </dd>
-<dt>draft, –draft, -d</dt>
+<dt>draft</dt>
 <dd>
 Set the draft status to true in the front matter of COMMON_MARK_FILE.
-Removes datePublished.
+(Removes datePublished if pupulated. Will cause dateModified to be
+updated.)
 </dd>
-<dt>edit, –edit, -e</dt>
+<dt>edit</dt>
 <dd>
 Edit specific front matter fields in a Common Mark file use FIELD_LIST.
+(Automatically sets dateModified and populates dateCreated if needed.
+The draft field will be set to true if datePublished is not populated)
+</dd>
+<dt>publish</dt>
+<dd>
+Validate then publish post on success validation (will set the
+draft/datePublished explicitly, sets dateModified and will populate
+dateCreated if not previously set)
 </dd>
 </dl>
 <h1 id="examples">EXAMPLES</h1>
@@ -72,11 +88,11 @@ cd $HOME/Site/website
 # Create your first post
 nano $HOME/Documents/FirstPost.md
 # Create/curate the Front Matter for your first blog post
-BlogIt edit $HOME/Documents/FirstPost.md
+blogit edit $HOME/Documents/FirstPost.md
 # Check to make sure everything is ready to go
-BlogIt check $HOME/Documents/FirstPost.md
+blogit check $HOME/Documents/FirstPost.md
 # Publishing into your blog&#39;s directory tree
-BlogIt $HOME/Document/FirstPost.md
+blogit publish $HOME/Document/FirstPost.md
 # See the blog post ready in your blog directory
 tree blog</code></pre>
 <p>Run a Common Mark to HTML converter like Pandoc on the Common Mark

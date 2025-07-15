@@ -57,16 +57,16 @@ Also helpful if you use BlogIt to generate a blog website.
 2. Change into the repository directory
 3. Run `deno task build`
 4. Check the the help
-5. Copy `./bin/BlogIt` (or `.\bin\BlogIt.exe` on Windows) to someplace in your path (e.g. `$HOME/.deno/bin`)
+5. Copy `./bin/blogit` (or `.\bin\blogit.exe` on Windows) to someplace in your path (e.g. `$HOME/.deno/bin`)
 
 
 ~~~shell
 git clone https://github.com/rsdoiel/BlogIt
 cd BlogIt
 deno task build
-./bin/BlogIt --help
-cp -v ./bin/BlogIt $HOME/.deno/bin/
-BlogIt
+./bin/blogit --help
+cp -v ./bin/blogit $HOME/.deno/bin/
+blogit --version
 ~~~
 
 Or for Windows 10/11 using PowerShell
@@ -75,8 +75,9 @@ Or for Windows 10/11 using PowerShell
 git clone https://github.com/rsdoiel/BlogIt
 cd BlogIt
 deno task build
-./bin/BlogIt --help
-copy .\bin\BlogIt.exe $HOME\.deno\bin\
+./bin/blogit --help
+copy .\bin\blogit.exe $HOME\.deno\bin\
+blogit --version
 ~~~
 
 ## Author

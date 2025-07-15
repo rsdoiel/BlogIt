@@ -9,7 +9,7 @@ PROJECT = BlogIt
 
 PACKAGE = BlogIt
 
-PROGRAMS = BlogIt
+PROGRAMS = blogit
 
 GIT_GROUP = rsdoiel
 
@@ -49,6 +49,7 @@ bin: .FORCE
 
 compile: .FORCE
 	deno task build
+	./bin/blogit --help >blogit.1.md
 
 check: .FORCE
 	deno task check
@@ -83,16 +84,11 @@ save:
 website: $(HTML_PAGES) .FORCE
 	make -f website.mak
 
-#publish: website .FORCE
-#	./publish.bash
-
-htdocs: .FORCE
-	deno task htdocs
-	deno task transpile
+publish: website .FORCE
+	./publish.bash
 
 test: .FORCE
 	deno task test
-	deno task editor_test.ts
 
 install: build
 	@echo "Installing programs in $(PREFIX)/bin"

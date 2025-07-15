@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "build": "deno compile --allow-read --allow-write --allow-env --allow-sys=uid --allow-run --output bin/BlogIt mod.ts",
+    "build": "deno compile --allow-read --allow-write --allow-env --allow-sys=uid --allow-run --output bin/blogit mod.ts",
     "test": "deno test --allow-read --allow-write --allow-env --allow-run",
     "installer.sh": "cmt codemeta.json installer.sh",
     "installer.ps1": "cmt codemeta.json installer.ps1",

@@ -61,8 +61,6 @@ allow BlogIt to be used in other Deno+TypeScipt projects)</li>
 blogit tool)</li>
 <li><a href="src/commonMarkDoc.ts">commonMarkDoc.ts</a> (creates a
 simple object made of front matter and markdown content)</li>
-<li><a href="src/deps.ts">deps.ts</a> (common dependencies and
-imports)</li>
 <li><a href="src/editor.ts">editor.ts</a> (allows you to launch a text
 editor to update the field in your front matter)</li>
 <li><a href="frontMatterEditor.ts">frontMatterEditor.ts</a> (this does
@@ -71,9 +69,8 @@ the real work of validation and curation of the front matter)</li>
 fields in the front matter)</li>
 </ul></li>
 </ul>
-<p>The whole thing is less than 700 lines of code. Not too bad in terms
-of a maintenance challenges. It probably could be simplified further but
-that I’ll leave for a future release.</p>
+<p>The whole thing is small enough to minimize. It probably could be
+simplified further but that I’ll leave for a future release.</p>
 <h2 id="installing-blogit">Installing <strong>BlogIt</strong></h2>
 <p><strong>BlogIt</strong> is in the early stage of development and not
 currently built for distribution. You can easily compile
@@ -85,28 +82,51 @@ href="https://github.com/rsdoiel/BlogIt"
 class="uri">https://github.com/rsdoiel/BlogIt</a></li>
 <li>Deno &gt;= 2.4.1</li>
 </ul>
+<h3 id="suggested-software">Suggested Software</h3>
+<ul>
+<li>CMTools &gt;= v0.0.35 (used to generate CITATION.cff, version.ts,
+etc.)</li>
+<li>Pandoc &gt;= 3.5 (used to produce documentation in HTML)</li>
+</ul>
+<p>Also helpful if you use BlogIt to generate a blog website.</p>
+<ul>
+<li><a href="https://pagefind.app">PageFind</a>, site search from HTML
+documents</li>
+<li><a href="https:/flatlake.app">FlatLake</a>, JSON API from Front
+Matter</li>
+<li><a href="https://jqlang.org">jq</a>, nice for view JSON and checking
+for values</li>
+<li><a href="https://github.com/mgdm/htmlq">htmlq</a>, like
+<code>jq</code> but for HTML documents</li>
+<li>FlatTools (coming soon), tools to turn FlatLake JSON API into RSS
+and sitemap.xml</li>
+<li>RenderCMark (coming soon), tool to render Common Markdown to HTML
+respecting front matter and allowing for handlebarsjs site
+templates</li>
+</ul>
 <h3 id="steps-to-build">Steps to build</h3>
 <ol type="1">
 <li>Clone the repository</li>
 <li>Change into the repository directory</li>
 <li>Run <code>deno task build</code></li>
 <li>Check the the help</li>
-<li>Copy <code>./bin/BlogIt</code> (or <code>.\bin\BlogIt.exe</code> on
+<li>Copy <code>./bin/blogit</code> (or <code>.\bin\blogit.exe</code> on
 Windows) to someplace in your path
 (e.g. <code>$HOME/.deno/bin</code>)</li>
 </ol>
 <pre class="shell"><code>git clone https://github.com/rsdoiel/BlogIt
 cd BlogIt
 deno task build
-./bin/BlogIt --help
-cp -v ./bin/BlogIt $HOME/.deno/bin/
-BlogIt</code></pre>
+./bin/blogit --help
+cp -v ./bin/blogit $HOME/.deno/bin/
+blogit --version</code></pre>
 <p>Or for Windows 10/11 using PowerShell</p>
 <pre class="pwsh"><code>git clone https://github.com/rsdoiel/BlogIt
 cd BlogIt
 deno task build
-./bin/BlogIt --help
-copy .\bin\BlogIt.exe $HOME\.deno\bin\</code></pre>
+./bin/blogit --help
+copy .\bin\blogit.exe $HOME\.deno\bin\
+blogit --version</code></pre>
 <h2 id="author">Author</h2>
 <ul>
 <li>R. S. Doiel, <a href="https://orcid.org/0000-0003-0900-6903">ORCID:

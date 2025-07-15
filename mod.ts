@@ -31,29 +31,30 @@ import { licenseText, releaseDate, releaseHash, version } from "./version.ts";
 import { helpText, fmtHelp } from "./helptext.ts";
 
 async function main() {
-  const appName = 'BlogIt';
+  const appName = 'blogit';
   const args = parseArgs(Deno.args, {
-    boolean: ["help", "version", "license", "draft", "check", "edit" ],
+    boolean: ["help", "version", "license" ],
     string: ["prefix"],
     alias: {
       h: "help",
       v: "version",
       l: "license",
       p: "prefix",
-      c: "check",
-      d: "draft",
-      e: "edit",
     },
     default: {
       prefix: "blog",
     },
   });
 
-  if (args.help) {
+  if (args.help || args.length === 0) {
     console.log(
       fmtHelp(helpText, appName, version, releaseDate, releaseHash)
     );
-    Deno.exit(0);
+    if (args.help) {
+      Deno.exit(0);
+    } else {
+      Deno.exit(1);
+    }
   }
 
   if (args.version) {
@@ -67,25 +68,42 @@ async function main() {
   }
 
   // Handle verb commands without dash prefix.
+  let verb: string | null | undefined = "";
   switch (args._[0] as string) {
+    case "config":
+      console.log('DEBUG config not implemented'); // DEBUG
+      Deno.exit(1);// DEBUG
+      break;
     case "check":
-      args.check = true;
-      args._.shift();
+      verb = args._.shift() as string;
       break;
     case "edit":
-      args.edit = true;
-      args._.shift();
+      verb = args._.shift() as string;
       break;
     case "draft":
-      args.draft = true;
+      verb = args._.shift() as string;
+      break;
+    case "publish":
+      verb = args._.shift() as string;
+      break;
+    case "help":
       args._.shift();
+      args.help = true;
+      break;
+    default:
+      verb = null;
       break;
   }
+  if (verb === undefined || verb === null) {
+      console.error(`"${verb}" is not supported action (${appName} ${version})`);
+      Deno.exit(1);
+  }
+  verb = (verb as string).toLocaleLowerCase();
 
   const filePath = args._[0] as string; // Explicitly assert filePath as string
-  const dateOfPost = args._[1] as string | undefined; // Explicitly assert dateOfPost as string or undefined
+  const dateOfPost = args._[1] as string | undefined; // If explicity provided it should overwrite the value and set draft to false
 
-  if (args.check) {
+  if (verb === 'check') {
     if (await exists(filePath, {isDirectory: true})) {
       console.log(`Checking the directory ${filePath}`);
       await checkDirectory(filePath);
@@ -112,9 +130,9 @@ async function main() {
   const content = await Deno.readTextFile(filePath);
   const cmarkDoc: CommonMarkDoc = stringToCommonMarkDoc(content);
 
-  if (args.draft || args.edit) {
+  if (verb in [ "draft", "edit" ]) {
     // Set to draft is args.draft is true
-    if (args.draft) {
+    if (verb == 'draft') {
       if (cmarkDoc.frontMatter.draft === false) {
         cmarkDoc.frontMatter.draft = true;
         delete cmarkDoc.frontMatter.datePublished;
@@ -123,7 +141,7 @@ async function main() {
     }
 
     // if args.edit then edit the front matter
-    if (args.edit) {
+    if (verb === 'edit') {
       const fields = args._.slice(1) as Array<keyof Metadata>; // Explicitly assert fields as string array
       await editFrontMatter(cmarkDoc, fields);
     }
@@ -140,8 +158,11 @@ async function main() {
     }
     Deno.exit(0);
   }
+
   // OK, we must intend to engage the publication process.
-  await processFile(filePath, args.prefix, dateOfPost);
+  if (verb === 'publish') {
+    await processFile(filePath, args.prefix, dateOfPost);
+  }
 }
 
 if (import.meta.main) {

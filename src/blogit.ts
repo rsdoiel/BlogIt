@@ -243,7 +243,7 @@ export async function checkFile(filePath: string) {
   const content = await Deno.readTextFile(filePath);
   const cmarkDoc = stringToCommonMarkDoc(content);
   const res = validateFrontMatter(cmarkDoc);
-  res.ok ? "" : console.error(`${filePath}: ${res.error}`);
+  res.ok ? "" : console.log(`${filePath}: ${res.error}`);
 }
 
 export async function checkDirectory(dirPath: string) {
@@ -252,7 +252,7 @@ export async function checkDirectory(dirPath: string) {
       const content = await Deno.readTextFile(entry.path);
       const cmarkDoc = stringToCommonMarkDoc(content);
       const res = validateFrontMatter(cmarkDoc);
-      res.ok ? "" : console.error(`${entry.path}: ${res.error}`);
+      res.ok ? "" : console.log(`${entry.path}: ${res.error}`);
     }
   }
 }

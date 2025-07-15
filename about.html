@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>BlogIt</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<nav>
+<ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="index.html">README</a></li>
+    <li><a href="LICENSE">LICENSE</a></li>
+    <li><a href="INSTALL.html">INSTALL</a></li>
+    <li><a href="user_manual.html">User Manual</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="search.html">Search</a></li>
+    <li><a href="https://github.com/rsdoiel/BlogIt">GitHub</a></li>
+</ul>
+</nav>
+<section>
+<h1 id="about-this-software">About this software</h1>
+<h2 id="blogit-0.0.1">BlogIt 0.0.1</h2>
+<p>Initial sketch of BlogIt.</p>
+<h3 id="authors">Authors</h3>
+<ul>
+<li>Robert Doiel, <a href="https://orcid.org/0000-0003-0900-6903"
+class="uri">https://orcid.org/0000-0003-0900-6903</a></li>
+</ul>
+<h3 id="maintainers">Maintainers</h3>
+<ul>
+<li>Robert Doiel, <a href="https://orcid.org/0000-0003-0900-6903"
+class="uri">https://orcid.org/0000-0003-0900-6903</a></li>
+</ul>
+<p><strong>BlogIt</strong> is a command line program for curating front
+matter in Common Mark (Markdown) documents used in producing a blog. It
+also copies the Common Mark document which validated front matter into
+your blog's directory tree.</p>
+<p>Here's an example of creating a blog from scratch while levaraging
+<strong>BlogIt</strong></p>
+<pre class="shell"><code># Pick an editor, example nano in the case
+export EDITOR&amp;#x3D;nano
+mkdir -p $HOME/Site/website/blog
+cd $HOME/Site/website
+# Create your first post
+nano $HOME/Documents/FirstPost.md
+# Create/curate the Front Matter for your first blog post
+BlogIt edit $HOME/Documents/FirstPost.md
+# Check to make sure everything is ready to go
+BlogIt check $HOME/Documents/FirstPost.md
+# Publishing into your blog&amp;#x27;s directory tree
+BlogIt $HOME/Document/FirstPost.md
+# See the blog post ready in your blog directory
+tree blog</code></pre>
+<p>Run a Common Mark to HTML converter like Pandoc on the Common Mark
+files to produce HTML. Then you're ready to run <a
+href="https://pagefind.com">PageFind</a> for search and <a
+href="https://flatlake.app">FlatLake</a> to render your blog's JSON
+API.</p>
+<ul>
+<li>License: <a
+href="https://www.gnu.org/licenses/agpl-3.0.html#license-text"
+class="uri">https://www.gnu.org/licenses/agpl-3.0.html#license-text</a></li>
+<li>GitHub: <a href="https://github.com/rsdoiel/BlogIt"
+class="uri">https://github.com/rsdoiel/BlogIt</a></li>
+<li>Issues: <a href="https://github.com/rsdoiel/BlogIt/issues"
+class="uri">https://github.com/rsdoiel/BlogIt/issues</a></li>
+</ul>
+<h3 id="programming-languages">Programming languages</h3>
+<ul>
+<li>TypeScript</li>
+</ul>
+<h3 id="software-requirements">Software Requirements</h3>
+<ul>
+<li>Deno &gt;= 2.4.1</li>
+<li>Git &gt;= 2.3</li>
+</ul>
+<h3 id="software-suggestions">Software Suggestions</h3>
+<ul>
+<li>CMTools &gt;= v0.0.35</li>
+<li>Pandoc &gt;= 3.6</li>
+</ul>
+</section>
+</body>
+</html>

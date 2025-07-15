@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>BlogIt</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<nav>
+<ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="index.html">README</a></li>
+    <li><a href="LICENSE">LICENSE</a></li>
+    <li><a href="INSTALL.html">INSTALL</a></li>
+    <li><a href="user_manual.html">User Manual</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="search.html">Search</a></li>
+    <li><a href="https://github.com/rsdoiel/BlogIt">GitHub</a></li>
+</ul>
+</nav>
+<section>
+<h1 id="name">NAME</h1>
+<p>BlogIt</p>
+<h1 id="synopsis">SYNOPSIS</h1>
+<p>BlogIt <a href="#options">OPTIONS</a> COMMON_MARK_FILE
+[DATE_OF_POST]</p>
+<h1 id="description">DESCRIPTION</h1>
+<p>BlogIt provides a means of currating front matter in a Common Mark or
+Markdown document. When you’re ready to publish (when the front matter
+validates) it’ll copy the document into a blog directory structure.</p>
+<h1 id="options">OPTIONS</h1>
+<p>Options come as the last parameter(s) on the command line.</p>
+<dl>
+<dt>-h, –help</dt>
+<dd>
+display help
+</dd>
+<dt>-v, –version</dt>
+<dd>
+display version
+</dd>
+<dt>-l, –license</dt>
+<dd>
+display license
+</dd>
+<dt>–prefix, -p</dt>
+<dd>
+Set an explicit path to the “blog” directory.
+</dd>
+<dt>check, –check, -c</dt>
+<dd>
+check COMMON_MARK_FILE or directory PATH expected front matter reporting
+problems.
+</dd>
+<dt>draft, –draft, -d</dt>
+<dd>
+Set the draft status to true in the front matter of COMMON_MARK_FILE.
+Removes datePublished.
+</dd>
+<dt>edit, –edit, -e</dt>
+<dd>
+Edit specific front matter fields in a Common Mark file use FIELD_LIST.
+</dd>
+</dl>
+<h1 id="examples">EXAMPLES</h1>
+<p>front matter into your blog’s directory tree.</p>
+<p>Here’s an example of creating a blog from scratch while levaraging
+<strong>BlogIt</strong></p>
+<pre class="shell"><code># Pick an editor, example nano in the case
+export EDITOR=nano
+mkdir -p $HOME/Site/website/blog
+cd $HOME/Site/website
+# Create your first post
+nano $HOME/Documents/FirstPost.md
+# Create/curate the Front Matter for your first blog post
+BlogIt edit $HOME/Documents/FirstPost.md
+# Check to make sure everything is ready to go
+BlogIt check $HOME/Documents/FirstPost.md
+# Publishing into your blog&#39;s directory tree
+BlogIt $HOME/Document/FirstPost.md
+# See the blog post ready in your blog directory
+tree blog</code></pre>
+<p>Run a Common Mark to HTML converter like Pandoc on the Common Mark
+files to produce HTML. Then you’re ready to run <a
+href="https://pagefind.com">PageFind</a> for search and <a
+href="https://flatlake.app">FlatLake</a> to render your blog’s JSON
+API.</p>
+</section>
+</body>
+</html>

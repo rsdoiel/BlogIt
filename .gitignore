@@ -1,0 +1,8 @@
+bin/*
+man/*
+dist/*
+blog/*
+*.bak
+*~
+*.tmp
+*.swp

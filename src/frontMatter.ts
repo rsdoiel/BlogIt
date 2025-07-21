@@ -112,7 +112,7 @@ function assignValue<T extends keyof Metadata>(
       } else {
         delete frontMatter[field];
       }
-      //frontMatter[field] = new Date(newValue).toISOString().split("T")[0];
+      //frontMatter[field] = (new Date(newValue)).toISOString().split("T")[0];
       break;
     default:
       frontMatter[field] = newValue.trim();

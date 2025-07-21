@@ -38,7 +38,7 @@ export async function publishFile(
   let datePublished: string = '';
   if (dateOfPost !== undefined) {
     datePublished = dateOfPost;
-  } else if (cmarkDoc.frontMatter.datePublished !== undefined && (cmarkDoc.frontMatter.datePublished as string).trim() !== "") {
+  } else if (cmarkDoc.frontMatter.datePublished !== undefined && cmarkDoc.frontMatter.datePublished) {
     datePublished = cmarkDoc.frontMatter.datePublished as string;
   } else {
     datePublished = (new Date()).toISOString().split('T')[0] as string;
@@ -72,7 +72,7 @@ export async function publishFile(
     }
   }
   // Calculate expected path
-  const [year, month, day] = datePublished.split("-");
+  const [year, month, day] = datePublished.toString().split("-");
   const targetDir = `${prefix || "blog"}/${year}/${month}/${day}`;
   // Ensure path exists
   await ensureDir(targetDir);

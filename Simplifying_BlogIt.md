@@ -16,12 +16,12 @@ abstract: |
 
   Other tools can aggregate blog metadata like [FlatLake](https://flatlake.app).
 dateCreated: 2025-07-12
-dateModified: '2025-07-21'
+dateModified: 2025-07-21
 keywords:
   - font matter
   - CommonMark
   - blog
-datePublished: '2025-07-21'
+datePublished: 2025-07-21
 ---
 
 # Simplifying BlogIt

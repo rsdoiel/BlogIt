@@ -1,5 +1,6 @@
 /**
- * commonMarkDoc.ts is a module for handling CommomMark and Markdown documents with front matter. It is part of the BlogIt project.
+ * commonMarkDoc.ts is a module for handling CommomMark and Markdown documents with front matter.
+ * It is part of the BlogIt project.
  * 
  *  Copyright (C) 2025  R. S. Doiel
  * 
@@ -26,7 +27,7 @@ export interface CommonMarkDoc {
 
 /**
  * stringToCommonMarkDoc takes a string and splits it into a record with frontmatter and markdown
- * @param content string, the text string to transform into a CommonMarkDoc type, `{ frontMatter: Record<string, unknown>; markdown: string }
+ * @param content string, the text string to transform into a CommonMarkDoc type.
  * @return `{frontMatter: Record<string, unknown>; markdown: string }`
  */
 export function stringToCommonMarkDoc(
@@ -44,8 +45,8 @@ export function stringToCommonMarkDoc(
 }
 
 /**
- * commonMarkDocToString takes a ``{ frontMatter: Record<string, unknown>; markdown: string }` and folders into string prefixed by the front matter block.
- * @param cmarkDoc `{ frontMatter: Record<string, unknown>; markdown: string }`
+ * commonMarkDocToString takes a CommonMarkDoc object and renders it into string prefixed by the front matter block.
+ * @param cmarkDoc CommonMarkDoc
  * @return string
  */
 export function commonMarkDocToString(
@@ -61,7 +62,7 @@ ${cmarkDoc.markdown}`;
 }
 
 /**
- * commonMarkDocPreprocessor takes a `CommonMarkDoc` object and maps the ".md" links to ".html" links
+ * commonMarkDocPreprocessor takes a CommonMarkDoc object and maps the ".md" links to ".html" links
  * and includes code blocks using the `@include-code-block` directive.
  *
  * @param cmarkDoc: CommmonMarkDoc

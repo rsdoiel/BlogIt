@@ -32,9 +32,9 @@ am relying on an off the shelf tool to perform front matter aggregation
 it becomes more important to make the front matter consist. The new
 priorities for <strong>BlogIt</strong> are.</p>
 <ol type="1">
-<li>Curating the front matter of the CommonMark document</li>
-<li>When ready to publish, update the font matter and Copy CommonMark
-document into the blog directory tree</li>
+<li>Curating the front matter of CommonMark documents</li>
+<li>Publishing (staging) CommonMark documents in the blog directory
+tree</li>
 </ol>
 <p>With curating front matter the priority some additional features will
 be helpful.</p>
@@ -54,6 +54,7 @@ matter</li>
 <li>license</li>
 <li>prefix BLOG_BASE_PATH (to set an explicit path to the “blog”
 directory)</li>
+<li>process (run the processor over the CommonMark document)</li>
 </ul>
 <h2 id="action">ACTION</h2>
 <p>The following actions need to be supported in the new
@@ -72,6 +73,11 @@ date</li>
 <li>edit COMMONMARK_FILE [FRONT_MATTER_FIELD …]
 <ul>
 <li>edit all or a subset of standard front matter fields</li>
+</ul></li>
+<li>process COMMONMARK_FILE
+<ul>
+<li>resolve the links to markdown files with HTML links</li>
+<li>include embedded code blocks</li>
 </ul></li>
 <li>publish COMMONMARK_FILE
 <ul>

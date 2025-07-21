@@ -15,7 +15,7 @@ abstract: |
   2. Copy CommonMark files into the blog directory tree
 
   Other tools can aggregate blog metadata like [FlatLake](https://flatlake.app).
-dateCreated: 2025-07-12T00:00:00.000Z
+dateCreated: 2025-07-12
 dateModified: '2025-07-21'
 keywords:
   - font matter
@@ -33,8 +33,8 @@ __BlogIt__ is a command I've written many times over the years. Previous it was 
 
 I am updating the way my website and blog are is built. I am adopting [FlatLake](https://flatlake.app) for fulfill the role of aggregator. This changes the role __BlogIt__ plays.  Since I am relying on an off the shelf tool to perform front matter aggregation it becomes more important to make the front matter consist. The new priorities for __BlogIt__ are.
 
-1. Curating the front matter of the CommonMark document
-2. When ready to publish, update the font matter and Copy CommonMark document into the blog directory tree
+1. Curating the front matter of CommonMark documents
+2. Publishing (staging) CommonMark documents in the blog directory tree
 
 With curating front matter the priority some additional features will be helpful.
 
@@ -55,6 +55,7 @@ blogit [OPTIONS] ACTION COMMONMARK_FILE [DATE_OF_POST]
 - version
 - license
 - prefix BLOG_BASE_PATH (to set an explicit path to the "blog" directory)
+- process (run the processor over the CommonMark document)
 
 ## ACTION
 
@@ -66,6 +67,9 @@ The following actions need to be supported in the new implementation.
   -  set the front matter draft attribute to true, clear the published date
 - edit COMMONMARK_FILE [FRONT_MATTER_FIELD ...]
   - edit all or a subset of standard front matter fields
+- process COMMONMARK_FILE
+  - resolve the links to markdown files with HTML links
+  - include embedded code blocks
 - publish COMMONMARK_FILE
   - read front matter
   - set draft to false

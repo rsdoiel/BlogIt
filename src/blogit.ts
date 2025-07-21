@@ -18,79 +18,69 @@
  */
 import { copy, ensureDir, walk } from "@std/fs";
 import * as path from "@std/path";
-import { editFrontMatter } from "./frontMatterEditor.ts";
-import { metadataFields } from "./types.ts";
+import { metadataFields } from "./frontMatter.ts";
 import {
   CommonMarkDoc,
   commonMarkDocToString,
+  commonMarkDocPreprocessor,
   stringToCommonMarkDoc,
 } from "./commonMarkDoc.ts";
 
-export async function processFile(
+export async function publishFile(
   filePath: string,
   prefix: string,
+  preprocesor?: boolean,
   dateOfPost?: string,
 ) {
   // FIXME: if options includes draft then the draft value might cause a change.
   const content = await Deno.readTextFile(filePath);
   const cmarkDoc: CommonMarkDoc = stringToCommonMarkDoc(content);
-  // Validate the front matter
+  let datePublished: string = '';
+  if (dateOfPost !== undefined) {
+    datePublished = dateOfPost;
+  } else if (cmarkDoc.frontMatter.datePublished !== undefined && (cmarkDoc.frontMatter.datePublished as string).trim() !== "") {
+    datePublished = cmarkDoc.frontMatter.datePublished as string;
+  } else {
+    datePublished = (new Date()).toISOString().split('T')[0] as string;
+  }
+  if (cmarkDoc.frontMatter.datePublished !== datePublished) {
+    cmarkDoc.frontMatter.datePublished = datePublished;
+    cmarkDoc.frontMatter.dateModified = datePublished;
+    cmarkDoc.changed = true;
+  }
+  // We are attempting to publish so we always remove "draft"
+  if (cmarkDoc.frontMatter.draft !== undefined) {
+    delete cmarkDoc.frontMatter.draft;
+  }
+  // Validate the front matter before take a publication action.
   let res = validateFrontMatter(cmarkDoc);
   if (!res.ok) {
     console.error(`${filePath} not ready to publish, ${res.error}`);
-    await editFrontMatter(cmarkDoc, []);
-    if (cmarkDoc.changed) {
-        if (confirm(`save changes ${filePath}?`)) {
-        // Backup original file
-        await createBackup(filePath);
-        // Write output updated version
-        await Deno.writeTextFile(filePath, commonMarkDocToString(cmarkDoc));
-        console.log(`Wrote ${filePath}`);
-      } else {
-        console.log("Aborted changes not saved.");
-        return;
-      }
-    } else {
-      console.log(`${filePath} not ready to publish, aborting, ${res.error}`);
-      return;
-    }
-    res = validateFrontMatter(cmarkDoc);
-    if (!res.ok) {
-      console.error(`${filePath}, aborting, ${res.error}`);
-      return;
-    }
-  }
-  // Abort publishing if draft is true.
-  if (cmarkDoc.frontMatter.draft) {
-    console.log("Document is a draft. Exiting.");
     return;
   }
-  // Handle datePublished
-  let datePublished: string = (new Date()).toISOString().split("T")[0];
-  if (dateOfPost) {
-    datePublished = dateOfPost;
+  // We've past validation so we should save any changes.
+  if (cmarkDoc.changed) {
+    if (confirm(`save changes ${filePath}?`)) {
+      // Backup original file
+      await createBackup(filePath);
+      // Write output updated version
+      await Deno.writeTextFile(filePath, commonMarkDocToString(cmarkDoc));
+      console.log(`Wrote ${filePath}`);
+    } else {
+      console.log("Aborted changes not saved.");
+      return;
+    }
   }
-
-  // Handle publication date change.
-  if (cmarkDoc.frontMatter.datePublished !== datePublished) {
-    // See if datePublished is set, if not set it today.
-    console.log(`set datePublished ${datePublished}`);
-    cmarkDoc.frontMatter.datePublished = datePublished;
-    const updatedContent = commonMarkDocToString(cmarkDoc);
-    await createBackup(filePath);
-    await Deno.writeTextFile(filePath, updatedContent);
-    console.log(`Wrote ${filePath}`);
-  } else if (
-    cmarkDoc.frontMatter.datePublished !== undefined &&
-    cmarkDoc.frontMatter.datePublished !== ""
-  ) {
-    datePublished = cmarkDoc.frontMatter.datePublished as unknown as string;
-  }
-
+  // Calculate expected path
   const [year, month, day] = datePublished.split("-");
   const targetDir = `${prefix || "blog"}/${year}/${month}/${day}`;
-
+  // Ensure path exists
   await ensureDir(targetDir);
+  // Handle case where we want to publish using preprocessor.
+  if (preprocesor) {
+    await Deno.writeTextFile(`${targetDir}/${path.basename(filePath)}`, commonMarkDocPreprocessor(cmarkDoc));
+    return;
+  }
   await copy(filePath, `${targetDir}/${path.basename(filePath)}`);
 }
 
@@ -122,6 +112,10 @@ export async function createBackup(originalPath: string) {
   }
 }
 
+function isDate(object: any): object is Date {
+  return object instanceof Date;
+}
+
 function assertType(
   val: unknown,
   vTypeOf: string,
@@ -132,28 +126,18 @@ function assertType(
     return { ok: false, error: `expected ${vTypeOf}, got null` };
   }
   if (aType !== vTypeOf) {
-    return { ok: false, error: `expected type ${vTypeOf}, got ${aType}` };
-  }
-  if (vSubType !== undefined) {
-    switch (vSubType) {
-      case "date":
+    // Are we expecting a date sub-type?
+    if (vSubType !== undefined && vSubType === 'date') {
+      if (! isDate(val)) {
+        // If we don't have a date object, do we have something that acts like a date?
         try {
           new Date(`${val}`);
         } catch (error) {
           return { ok: false, error: `${error}` };
         }
-        break;
-      case "string":
-        for (const s of val as []) {
-          aType = typeof s;
-          if (aType !== "string") {
-            return {
-              ok: false,
-              error: `expected type array of string, got ${aType}`,
-            };
-          }
-        }
-        break;
+      }
+    } else {
+      return { ok: false, error: `expected type ${vTypeOf}, got ${aType}` };
     }
   }
   return { ok: true };
@@ -243,7 +227,7 @@ export async function checkFile(filePath: string) {
   const content = await Deno.readTextFile(filePath);
   const cmarkDoc = stringToCommonMarkDoc(content);
   const res = validateFrontMatter(cmarkDoc);
-  res.ok ? "" : console.log(`${filePath}: ${res.error}`);
+  res.ok ? "" : console.error(`${filePath}: ${res.error}`);
 }
 
 export async function checkDirectory(dirPath: string) {
@@ -252,7 +236,7 @@ export async function checkDirectory(dirPath: string) {
       const content = await Deno.readTextFile(entry.path);
       const cmarkDoc = stringToCommonMarkDoc(content);
       const res = validateFrontMatter(cmarkDoc);
-      res.ok ? "" : console.log(`${entry.path}: ${res.error}`);
+      res.ok ? "" : console.error(`${entry.path}: ${res.error}`);
     }
   }
 }

@@ -1,9 +1,10 @@
 ---
 title: BlogIt
-abstract: "__BlogIt__ is a command line program for curating front matter in Common Mark (Markdown) documents used in producing a blog. It also copies the Common Mark document which validated 
-front matter into your blog&#x27;s directory tree.
+abstract: "__BlogIt__ is a command line program for curating front matter in CommonMark (Markdown) documents used in producing a blog. __BlogIt__ primary purpose is curating the fornt matter 
+posts. It also supports a preprocessor for handling markdown linked files as HTML linked files and code include blocks. Additional functionality includes editing, checking and 
+publishing the CommonMark document to a blog directory structure.
 
-Here&#x27;s an example of creating a blog from scratch while levaraging __BlogIt__
+Here&#x27;s an example of creating a blog from scratch while levaraging __BlogIt__.
 
 ~~~shell
 # Pick an editor, example nano in the case
@@ -45,9 +46,10 @@ programming_language:
 keywords:
   - blog
   - front matter
-  - Common Mark
+  - CommonMark
+  - Markdown
 
-date_released: 2025-07-15
+date_released: 2025-07-21
 ---
 
 About this software
@@ -55,7 +57,7 @@ About this software
 
 ## BlogIt 0.0.1
 
-Initial sketch of BlogIt.
+Initial sketch and working prototype of BlogIt.
 
 ### Authors
 
@@ -69,10 +71,11 @@ Initial sketch of BlogIt.
 - Robert Doiel, <https://orcid.org/0000-0003-0900-6903>
 
 
-__BlogIt__ is a command line program for curating front matter in Common Mark (Markdown) documents used in producing a blog. It also copies the Common Mark document which validated 
-front matter into your blog&#x27;s directory tree.
+__BlogIt__ is a command line program for curating front matter in CommonMark (Markdown) documents used in producing a blog. __BlogIt__ primary purpose is curating the fornt matter 
+posts. It also supports a preprocessor for handling markdown linked files as HTML linked files and code include blocks. Additional functionality includes editing, checking and 
+publishing the CommonMark document to a blog directory structure.
 
-Here&#x27;s an example of creating a blog from scratch while levaraging __BlogIt__
+Here&#x27;s an example of creating a blog from scratch while levaraging __BlogIt__.
 
 ~~~shell
 # Pick an editor, example nano in the case
@@ -107,7 +110,7 @@ Run a Common Mark to HTML converter like Pandoc on the Common Mark files to prod
 
 ### Software Requirements
 
-- Deno &gt;&#x3D; 2.4.1
+- Deno &gt;&#x3D; 2.4.2
 - Git &gt;&#x3D; 2.3
 
 

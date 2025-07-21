@@ -19,11 +19,11 @@
 // mod.ts
 import { parse as parseArgs } from "@std/flags";
 import { exists } from "@std/fs/exists";
-import { checkDirectory, checkFile, createBackup, processFile } from "./src/blogit.ts";
-import { Metadata } from "./src/types.ts";
-import { editFrontMatter } from "./src/frontMatterEditor.ts";
+import { checkDirectory, checkFile, createBackup, publishFile } from "./src/blogit.ts";
+import { Metadata, editFrontMatter } from "./src/frontMatter.ts";
 import {
   CommonMarkDoc,
+  commonMarkDocPreprocessor,
   commonMarkDocToString,
   stringToCommonMarkDoc,
 } from "./src/commonMarkDoc.ts";
@@ -31,30 +31,30 @@ import { licenseText, releaseDate, releaseHash, version } from "./version.ts";
 import { helpText, fmtHelp } from "./helptext.ts";
 
 async function main() {
-  const appName = 'blogit';
+  const appName = 'BlogIt';
   const args = parseArgs(Deno.args, {
-    boolean: ["help", "version", "license" ],
+    boolean: ["help", "version", "license", "draft", "check", "edit", "publish", "process" ],
     string: ["prefix"],
     alias: {
       h: "help",
       v: "version",
       l: "license",
       p: "prefix",
+      c: "check",
+      d: "draft",
+      e: "edit",
+      pp: "process",
     },
     default: {
       prefix: "blog",
     },
   });
 
-  if (args.help || args.length === 0) {
+  if (args.help) {
     console.log(
       fmtHelp(helpText, appName, version, releaseDate, releaseHash)
     );
-    if (args.help) {
-      Deno.exit(0);
-    } else {
-      Deno.exit(1);
-    }
+    Deno.exit(0);
   }
 
   if (args.version) {
@@ -68,42 +68,33 @@ async function main() {
   }
 
   // Handle verb commands without dash prefix.
-  let verb: string | null | undefined = "";
   switch (args._[0] as string) {
-    case "config":
-      console.log('DEBUG config not implemented'); // DEBUG
-      Deno.exit(1);// DEBUG
-      break;
     case "check":
-      verb = args._.shift() as string;
+      args.check = true;
+      args._.shift();
       break;
     case "edit":
-      verb = args._.shift() as string;
+      args.edit = true;
+      args._.shift();
       break;
     case "draft":
-      verb = args._.shift() as string;
+      args.draft = true;
+      args._.shift();
+      break;
+    case "process":
+      args.process = true;
+      args._.shift();
       break;
     case "publish":
-      verb = args._.shift() as string;
-      break;
-    case "help":
+      args.publish = true
       args._.shift();
-      args.help = true;
-      break;
-    default:
-      verb = null;
       break;
   }
-  if (verb === undefined || verb === null) {
-      console.error(`"${verb}" is not supported action (${appName} ${version})`);
-      Deno.exit(1);
-  }
-  verb = (verb as string).toLocaleLowerCase();
 
   const filePath = args._[0] as string; // Explicitly assert filePath as string
-  const dateOfPost = args._[1] as string | undefined; // If explicity provided it should overwrite the value and set draft to false
+  const dateOfPost = args._[1] as string | undefined; // Explicitly assert dateOfPost as string or undefined
 
-  if (verb === 'check') {
+  if (args.check) {
     if (await exists(filePath, {isDirectory: true})) {
       console.log(`Checking the directory ${filePath}`);
       await checkDirectory(filePath);
@@ -130,9 +121,9 @@ async function main() {
   const content = await Deno.readTextFile(filePath);
   const cmarkDoc: CommonMarkDoc = stringToCommonMarkDoc(content);
 
-  if (verb in [ "draft", "edit" ]) {
+  if (args.draft || args.edit) {
     // Set to draft is args.draft is true
-    if (verb == 'draft') {
+    if (args.draft) {
       if (cmarkDoc.frontMatter.draft === false) {
         cmarkDoc.frontMatter.draft = true;
         delete cmarkDoc.frontMatter.datePublished;
@@ -141,7 +132,7 @@ async function main() {
     }
 
     // if args.edit then edit the front matter
-    if (verb === 'edit') {
+    if (args.edit) {
       const fields = args._.slice(1) as Array<keyof Metadata>; // Explicitly assert fields as string array
       await editFrontMatter(cmarkDoc, fields);
     }
@@ -159,9 +150,26 @@ async function main() {
     Deno.exit(0);
   }
 
-  // OK, we must intend to engage the publication process.
-  if (verb === 'publish') {
-    await processFile(filePath, args.prefix, dateOfPost);
+  if (args.publish) {
+    // OK, we must intend to engage the publication process.
+    await publishFile(filePath, args.prefix, args.process, dateOfPost);
+    Deno.exit(0);
+  }
+
+  // If args.process then run the preprocessor and write the output to standard out
+  if (args.process) {
+    let src: string = '';
+    try {
+      src = commonMarkDocPreprocessor(cmarkDoc);
+    } catch (err) {
+      console.error(err);
+      Deno.exit(1);
+    }
+    if (src === '') {
+      console.error(`no content after preprocessor ran for ${filePath}`)
+      Deno.exit(1);
+    }
+    console.log(src);
   }
 }
 

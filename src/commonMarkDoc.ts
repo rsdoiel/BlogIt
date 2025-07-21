@@ -1,5 +1,5 @@
 /**
- * commonMarkDoc.ts is a module for handling Commom Mark and Markdown documents with front matter. It is part of the BlogIt project.
+ * commonMarkDoc.ts is a module for handling CommomMark and Markdown documents with front matter. It is part of the BlogIt project.
  * 
  *  Copyright (C) 2025  R. S. Doiel
  * 
@@ -49,7 +49,7 @@ export function stringToCommonMarkDoc(
  * @return string
  */
 export function commonMarkDocToString(
-  cmarkDoc: { frontMatter: Record<string, unknown>; markdown: string },
+  cmarkDoc: CommonMarkDoc,
 ): string {
   if (Object.keys(cmarkDoc.frontMatter).length > 0) {
     return `---
@@ -59,3 +59,79 @@ ${cmarkDoc.markdown}`;
   }
   return cmarkDoc.markdown;
 }
+
+/**
+ * commonMarkDocPreprocessor takes a `CommonMarkDoc` object and maps the ".md" links to ".html" links
+ * and includes code blocks using the `@include-code-block` directive.
+ *
+ * @param cmarkDoc: CommmonMarkDoc
+ * @return string
+ */
+export function commonMarkDocPreprocessor(
+  cmarkDoc: CommonMarkDoc,
+): string {
+      // Convert markdown links to HTML links
+    const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+\.md)\)/g;
+    let processedMarkdown = cmarkDoc.markdown.replace(markdownLinkRegex, (_fullMatch, linkText, filePath) => {
+      const htmlFilePath = filePath.replace(/\.md$/, '.html');
+      return `[${linkText}](${htmlFilePath})`;
+    });
+
+    // Insert code blocks from external files
+    const insertBlockRegex = /@include-code-block\s+([^\s]+)(?:\s+(\w+))?/g;
+    processedMarkdown = processedMarkdown.replace(insertBlockRegex, (_fullMatch, filePath, language = '') => {
+      const fileContent = Deno.readTextFileSync(filePath);
+      if (fileContent) {
+        return `~~~${language}\n${fileContent}\n~~~`;
+      } else {
+        return `Error inserting block from ${filePath}`;
+      }
+    });
+    if (processedMarkdown !== cmarkDoc.markdown) {
+      return commonMarkDocToString({
+          frontMatter: cmarkDoc.frontMatter,
+          markdown: processedMarkdown,
+          changed: true
+      });
+    }
+    return commonMarkDocToString(cmarkDoc);
+}
+
+/**
+ * CMarkDoc implements the interface CommonMarkDoc
+ * It supports working with CommonMark documents that contain front matter
+ */
+export class CMarkDoc implements CommonMarkDoc {
+  frontMatter: Record<string, unknown> = {};
+  markdown: string = '';
+  changed: boolean = false;
+
+  /**
+   * parse takes a string hold CommonMark text and parses it into the CMarkDoc object structure.
+   */
+  parse(src: string): boolean {
+    const cmarkDoc: CommonMarkDoc = stringToCommonMarkDoc(src);
+    this.frontMatter = cmarkDoc.frontMatter;
+    this.markdown = cmarkDoc.markdown;
+    return (this.markdown.length > 0);
+  }
+  
+  /**
+   * stringify takes this object and returns a CommonMark representation including front matter.
+   */
+  stringify(): string {
+    return commonMarkDocToString(this);
+  }
+
+  /**
+   * processSync is a CommonMark pre-processor implementing two features. It performs two
+   * fucntions.
+   *   1. converts links to markdown files (ext. ".md") to their HTML file counter parts
+   *   2. Any `@insert-code-block` will include a source code file block in the resulting
+   *      source document.
+   */
+  processSync(): string {
+    return commonMarkDocPreprocessor(this);
+  }
+}
+

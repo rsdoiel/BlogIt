@@ -19,11 +19,11 @@
 </nav>
 <section>
 <h1 id="name">NAME</h1>
-<p>blogit</p>
+<p>BlogIt</p>
 <h1 id="synopsis">SYNOPSIS</h1>
-<p>blogit <a href="#options">OPTIONS</a> VERB COMMON_MARK_FILE</p>
+<p>BlogIt <a href="#options">OPTIONS</a> COMMONMARK_FILE</p>
 <h1 id="description">DESCRIPTION</h1>
-<p>blogit provides a means of currating front matter in a Common Mark or
+<p>BlogIt provides a means of currating front matter in a CommonMark or
 Markdown document. When you’re ready to publish (when the front matter
 validates) it’ll copy the document into a blog directory structure.</p>
 <h1 id="options">OPTIONS</h1>
@@ -45,36 +45,32 @@ display license
 <dd>
 Set an explicit path to the “blog” directory.
 </dd>
-</dl>
-<p>VERB</p>
-<dl>
-<dt>config</dt>
+<dt>check, –check, -c</dt>
 <dd>
-This will create a configuration file for default settings to use in the
-front matter.
-</dd>
-<dt>check</dt>
-<dd>
-check COMMON_MARK_FILE or directory PATH expected front matter reporting
+check COMMONMARK_FILE or directory PATH expected front matter reporting
 problems.
 </dd>
-<dt>draft</dt>
+<dt>draft, –draft, -d</dt>
 <dd>
-Set the draft status to true in the front matter of COMMON_MARK_FILE.
-(Removes datePublished if pupulated. Will cause dateModified to be
-updated.)
+Set the draft status to true in the front matter of COMMONMARK_FILE.
+Removes datePublished.
 </dd>
-<dt>edit</dt>
+<dt>edit, –edit, -e</dt>
 <dd>
-Edit specific front matter fields in a Common Mark file use FIELD_LIST.
-(Automatically sets dateModified and populates dateCreated if needed.
-The draft field will be set to true if datePublished is not populated)
+Edit specific front matter fields in a CommonMark file use FIELD_LIST.
+</dd>
+<dt>process, –process, -pp</dt>
+<dd>
+run COMMONMARK_FILE through the pre-processor writing the result to
+standard output.
 </dd>
 <dt>publish</dt>
 <dd>
-Validate then publish post on success validation (will set the
-draft/datePublished explicitly, sets dateModified and will populate
-dateCreated if not previously set)
+Run the publication process. If front matter pass validation the
+original front matter will be updated the published file will be written
+to the blog directory tree. This can be combined with the process option
+to run the pre-processor on the file before writing to the directory
+tree.
 </dd>
 </dl>
 <h1 id="examples">EXAMPLES</h1>
@@ -88,18 +84,19 @@ cd $HOME/Site/website
 # Create your first post
 nano $HOME/Documents/FirstPost.md
 # Create/curate the Front Matter for your first blog post
-blogit edit $HOME/Documents/FirstPost.md
+BlogIt edit $HOME/Documents/FirstPost.md
 # Check to make sure everything is ready to go
-blogit check $HOME/Documents/FirstPost.md
+BlogIt check $HOME/Documents/FirstPost.md
 # Publishing into your blog&#39;s directory tree
-blogit publish $HOME/Document/FirstPost.md
+BlogIt publish $HOME/Document/FirstPost.md
 # See the blog post ready in your blog directory
 tree blog</code></pre>
-<p>Run a Common Mark to HTML converter like Pandoc on the Common Mark
+<p>You are ready to run <a href="https://flatlake.app">FlatLake</a> to
+render your blog’s JSON API. You can then generate your RSS feeds and
+sitemap from the JSON API.</p>
+<p>Run a CommonMark to HTML converter like Pandoc on the CommonMark
 files to produce HTML. Then you’re ready to run <a
-href="https://pagefind.com">PageFind</a> for search and <a
-href="https://flatlake.app">FlatLake</a> to render your blog’s JSON
-API.</p>
+href="https://pagefind.com">PageFind</a> for search support.</p>
 </section>
 </body>
 </html>

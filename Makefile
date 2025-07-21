@@ -55,7 +55,7 @@ check: .FORCE
 	deno task check
 
 version.ts: codemeta.json
-	deno task version.ts
+	cmt codemeta.json version.ts
 
 format: $(shell ls -1 *.ts | grep -v version.ts | grep -v deps.ts)
 

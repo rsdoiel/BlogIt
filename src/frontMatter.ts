@@ -19,7 +19,43 @@
 import { parse, stringify } from "@std/yaml";
 import { CommonMarkDoc } from "./commonMarkDoc.ts";
 import { editTempData } from "./editor.ts";
-import { Metadata, metadataFields } from "./types.ts";
+
+export const metadataFields: Array<keyof Metadata> = [
+  "title",
+  "author",
+  "contributor",
+  "abstract",
+  "draft",
+  "dateCreated",
+  "dateModified",
+  "datePublished",
+  "keywords",
+  "series",
+  "seriesNo",
+  "pubType",
+  "copyrightYear",
+  "copyrightHolder",
+  "license"
+];
+
+
+export interface Metadata {
+  title?: string;
+  author: string;
+  contributor?: string;
+  abstract: string;
+  dateCreated: string;
+  dateModified: string;
+  datePublished?: string;
+  draft?: boolean;
+  keywords?: string[];
+  series?: string;
+  seriesNo?: number;
+  pubType?: string;
+  copyrightYear?: number;
+  copyrightHolder?: string;
+  license?: string | URL;
+}
 
 
 function yyyymmdd(s: string): boolean {

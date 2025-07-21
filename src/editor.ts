@@ -84,12 +84,10 @@ export async function editTempData(val: string): Promise<string> {
   if (val !== "") {
     await Deno.writeTextFile(tmpFilename, val);
   }
-  //console.log(`DEBUG started ${editor} with ${tmpFilename} to edit "${val}"`);
   const res = await editFile(editor, tmpFilename);
   if (await exists(tmpFilename, {isFile: true})) {
     await Deno.remove(tmpFilename);
   }
-  //console.log(`DEBUG cleanup from ${editor}, ${tmpFilename} -> ${JSON.stringify(res)}`);
   if (res.ok) {
     // NOTE: string is returned via standard out not the text of the file.
     return res.text;

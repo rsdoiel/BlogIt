@@ -3,10 +3,11 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: BlogIt
-abstract: "__BlogIt__ is a command line program for curating front matter in Common Mark (Markdown) documents used in producing a blog. It also copies the Common Mark document which validated 
-front matter into your blog&#x27;s directory tree.
+abstract: "__BlogIt__ is a command line program for curating front matter in CommonMark (Markdown) documents used in producing a blog. __BlogIt__ primary purpose is curating the fornt matter 
+posts. It also supports a preprocessor for handling markdown linked files as HTML linked files and code include blocks. Additional functionality includes editing, checking and 
+publishing the CommonMark document to a blog directory structure.
 
-Here&#x27;s an example of creating a blog from scratch while levaraging __BlogIt__
+Here&#x27;s an example of creating a blog from scratch while levaraging __BlogIt__.
 
 ~~~shell
 # Pick an editor, example nano in the case
@@ -41,11 +42,12 @@ contacts:
 
 repository-code: "https://github.com/rsdoiel/BlogIt"
 version: 0.0.1
-date-released: 2025-07-15
+date-released: 2025-07-21
 
 license-url: "https://www.gnu.org/licenses/agpl-3.0.html#license-text"
 keywords:
   - blog
   - front matter
-  - Common Mark
+  - CommonMark
+  - Markdown
 

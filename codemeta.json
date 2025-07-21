@@ -20,23 +20,24 @@
       "email": "rsdoiel@gmail.com"
     }
   ],
-  "dateCreated": "2025-07-15",
-  "dateModified": "2025-07-15",
-  "datePublished": "2025-07-15",
-  "description": "__BlogIt__ is a command line program for curating front matter in Common Mark (Markdown) documents used in producing a blog. It also copies the Common Mark document which validated \nfront matter into your blog's directory tree.\n\nHere's an example of creating a blog from scratch while levaraging __BlogIt__\n\n~~~shell\n# Pick an editor, example nano in the case\nexport EDITOR=nano\nmkdir -p $HOME/Site/website/blog\ncd $HOME/Site/website\n# Create your first post\nnano $HOME/Documents/FirstPost.md\n# Create/curate the Front Matter for your first blog post\nBlogIt edit $HOME/Documents/FirstPost.md\n# Check to make sure everything is ready to go\nBlogIt check $HOME/Documents/FirstPost.md\n# Publishing into your blog's directory tree\nBlogIt $HOME/Document/FirstPost.md\n# See the blog post ready in your blog directory\ntree blog\n~~~\n\nRun a Common Mark to HTML converter like Pandoc on the Common Mark files to produce HTML. Then you're ready to run [PageFind](https://pagefind.com) for search and \n[FlatLake](https://flatlake.app) to render your blog's JSON API.",
+  "dateCreated": "2025-07-12",
+  "dateModified": "2025-07-21",
+  "datePublished": "2025-07-21",
+  "description": "__BlogIt__ is a command line program for curating front matter in CommonMark (Markdown) documents used in producing a blog. __BlogIt__ primary purpose is curating the fornt matter \nposts. It also supports a preprocessor for handling markdown linked files as HTML linked files and code include blocks. Additional functionality includes editing, checking and \npublishing the CommonMark document to a blog directory structure.\n\nHere's an example of creating a blog from scratch while levaraging __BlogIt__.\n\n~~~shell\n# Pick an editor, example nano in the case\nexport EDITOR=nano\nmkdir -p $HOME/Site/website/blog\ncd $HOME/Site/website\n# Create your first post\nnano $HOME/Documents/FirstPost.md\n# Create/curate the Front Matter for your first blog post\nBlogIt edit $HOME/Documents/FirstPost.md\n# Check to make sure everything is ready to go\nBlogIt check $HOME/Documents/FirstPost.md\n# Publishing into your blog's directory tree\nBlogIt $HOME/Document/FirstPost.md\n# See the blog post ready in your blog directory\ntree blog\n~~~\n\nRun a Common Mark to HTML converter like Pandoc on the Common Mark files to produce HTML. Then you're ready to run [PageFind](https://pagefind.com) for search and \n[FlatLake](https://flatlake.app) to render your blog's JSON API.",
   "keywords": [
     "blog",
     "front matter",
-    "Common Mark"
+    "CommonMark",
+    "Markdown"
   ],
   "name": "BlogIt",
   "license": "https://www.gnu.org/licenses/agpl-3.0.html#license-text",
   "programmingLanguage": [
     "TypeScript"
   ],
-  "runtimePlatform": "Deno >= 2.4.1",
+  "runtimePlatform": "Deno >= 2.4.2",
   "softwareRequirements": [
-    "Deno >= 2.4.1",
+    "Deno >= 2.4.2",
     "Git >= 2.3"
   ],
   "softwareSuggestions": [
@@ -44,9 +45,9 @@
     "Pandoc >= 3.6"
   ],
   "version": "0.0.1",
-  "developmentStatus": "wip",
+  "developmentStatus": "concept",
   "issueTracker": "https://github.com/rsdoiel/BlogIt/issues",
-  "releaseNotes": "Initial sketch of BlogIt.",
+  "releaseNotes": "Initial sketch and working prototype of BlogIt.",
   "copyrightYear": 2025,
   "copyrightHolder": "R. S. Doiel"
 }

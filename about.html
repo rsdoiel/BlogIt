@@ -20,7 +20,7 @@
 <section>
 <h1 id="about-this-software">About this software</h1>
 <h2 id="blogit-0.0.1">BlogIt 0.0.1</h2>
-<p>Initial sketch of BlogIt.</p>
+<p>Initial sketch and working prototype of BlogIt.</p>
 <h3 id="authors">Authors</h3>
 <ul>
 <li>Robert Doiel, <a href="https://orcid.org/0000-0003-0900-6903"
@@ -32,11 +32,14 @@ class="uri">https://orcid.org/0000-0003-0900-6903</a></li>
 class="uri">https://orcid.org/0000-0003-0900-6903</a></li>
 </ul>
 <p><strong>BlogIt</strong> is a command line program for curating front
-matter in Common Mark (Markdown) documents used in producing a blog. It
-also copies the Common Mark document which validated front matter into
-your blog's directory tree.</p>
+matter in CommonMark (Markdown) documents used in producing a blog.
+<strong>BlogIt</strong> primary purpose is curating the fornt matter
+posts. It also supports a preprocessor for handling markdown linked
+files as HTML linked files and code include blocks. Additional
+functionality includes editing, checking and publishing the CommonMark
+document to a blog directory structure.</p>
 <p>Here's an example of creating a blog from scratch while levaraging
-<strong>BlogIt</strong></p>
+<strong>BlogIt</strong>.</p>
 <pre class="shell"><code># Pick an editor, example nano in the case
 export EDITOR&amp;#x3D;nano
 mkdir -p $HOME/Site/website/blog
@@ -71,7 +74,7 @@ class="uri">https://github.com/rsdoiel/BlogIt/issues</a></li>
 </ul>
 <h3 id="software-requirements">Software Requirements</h3>
 <ul>
-<li>Deno &gt;= 2.4.1</li>
+<li>Deno &gt;= 2.4.2</li>
 <li>Git &gt;= 2.3</li>
 </ul>
 <h3 id="software-suggestions">Software Suggestions</h3>

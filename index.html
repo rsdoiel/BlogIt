@@ -23,54 +23,51 @@
 my personal website and blog. <strong>BlogIt</strong> is the latest
 incarnation taking over duties from the now venerable <a
 href="https://github.com/rsdoiel/pttk">pttk</a>. I’ve found increasingly
-there is is good off the shelf for various chores. Example <a
-href="https://pagefind.app">PageFind</a> and <a
-href="https://flatlake.app">FlatLake</a>. Between those two you can turn
-key search based on the HTML rendered from Common Mark and a JSON API
-based on front matter in your Common Mark documents. Flatlake is
-particularly nice in that it sets you up with an easy way to render RSS.
-The nut result is the tools I’ve previously written have features no
-longer useful. It was time reaccess what my old “blogit” tool did. I
-found what was missing and needed was remarkably simple.</p>
+there are good off the shelf options for software chores. Examples
+include <a href="https://pagefind.app">PageFind</a> and <a
+href="https://flatlake.app">FlatLake</a>. Between those two you have a
+turn key search system and a JSON API. FlatLake itself can turn your
+CommonMark front matter into an aggregated JSON API. This is
+particularly nice for implementing features like RSS feeds and sitemap
+XML files. The net result is the tools I’ve previously written for
+similar tasks are no longer needed. This lead to re-access what my old
+“blogit” tool did. Core features are as follows.</p>
 <ol type="1">
 <li>Validation and curation of front matter in my posts</li>
-<li>A means, when ready, of copying those Common Mark documents into a
+<li>A means, when ready, of copying those CommonMark documents into a
 blog directory tree.</li>
 </ol>
 <p><strong>BlogIt</strong> is now implemented in TypeScript and compiled
 to an executable via Deno. It is focused on curating the metadata around
-blog post and when “publishing” placing it in the right directory
-structure.</p>
-<h2 id="blog-production-process">Blog production process</h2>
+blog post and “publishing” it to a blog staging directory.</p>
+<h2 id="blogit-blogging-process">BlogIt blogging process</h2>
 <ol type="1">
-<li>Use whatever tool(s) you like to create a Common Mark (Markdown)
-document</li>
-<li>Use <strong>BlogIt</strong> to edit or curate the front matter.</li>
-<li>Run Flatlake to render the JSON API</li>
+<li>Use my favorite edit to create CommonMark (Markdown) documents</li>
+<li>Use <strong>BlogIt</strong> to edit or curate the front matter and
+include any required code samples.</li>
+<li>Run FlatLake to render the JSON API</li>
 <li>Use JSON API to render the RSS feeds and sitemaps</li>
-<li>Render the Common Mark documents to HTML and run PageFind for
-search</li>
+<li>Render the CommonMark documents to HTML</li>
+<li>Run PageFind for search</li>
+<li>Review the staged site and deploy when ready</li>
 </ol>
-<h2 id="software-structure">Software structure</h2>
+<h2 id="blogit-software-structure">BlogIt Software structure</h2>
 <ul>
 <li><a href="mod.ts">mod.ts</a> (used to generate the executable and to
-allow BlogIt to be used in other Deno+TypeScipt projects)</li>
+allow BlogIt to be used in other Deno+TypeScript projects)</li>
 <li>src
 <ul>
-<li><a href="src/blogit.ts">blogit.ts</a> (holds the workflows for
-blogit tool)</li>
-<li><a href="src/commonMarkDoc.ts">commonMarkDoc.ts</a> (creates a
+<li><a href="src/blogit.ts">blogit.ts</a> (holds workflows for blogit
+tool)</li>
+<li><a href="src/commonMarkDoc.ts">commonMarkDoc.ts</a> (defines a
 simple object made of front matter and markdown content)</li>
 <li><a href="src/editor.ts">editor.ts</a> (allows you to launch a text
 editor to update the field in your front matter)</li>
-<li><a href="frontMatterEditor.ts">frontMatterEditor.ts</a> (this does
-the real work of validation and curation of the front matter)</li>
-<li><a href="types.ts">types.ts</a> (holds the structure of required
-fields in the front matter)</li>
+<li><a href="frontMatter.ts">frontMatter.ts</a> (this does the real work
+of validation and curation of the front matter)</li>
 </ul></li>
 </ul>
-<p>The whole thing is small enough to minimize. It probably could be
-simplified further but that I’ll leave for a future release.</p>
+<p>Presently the prototype is less than 2000 lines of TypeScript.</p>
 <h2 id="installing-blogit">Installing <strong>BlogIt</strong></h2>
 <p><strong>BlogIt</strong> is in the early stage of development and not
 currently built for distribution. You can easily compile
@@ -80,7 +77,7 @@ currently built for distribution. You can easily compile
 <li>Git to clone the repository, <a
 href="https://github.com/rsdoiel/BlogIt"
 class="uri">https://github.com/rsdoiel/BlogIt</a></li>
-<li>Deno &gt;= 2.4.1</li>
+<li>Deno &gt;= 2.4.2</li>
 </ul>
 <h3 id="suggested-software">Suggested Software</h3>
 <ul>
@@ -98,11 +95,6 @@ Matter</li>
 for values</li>
 <li><a href="https://github.com/mgdm/htmlq">htmlq</a>, like
 <code>jq</code> but for HTML documents</li>
-<li>FlatTools (coming soon), tools to turn FlatLake JSON API into RSS
-and sitemap.xml</li>
-<li>RenderCMark (coming soon), tool to render Common Markdown to HTML
-respecting front matter and allowing for handlebarsjs site
-templates</li>
 </ul>
 <h3 id="steps-to-build">Steps to build</h3>
 <ol type="1">
@@ -133,7 +125,7 @@ blogit --version</code></pre>
 0000-0003-0900-6903</a></li>
 </ul>
 <h2 id="license">LICENSE</h2>
-<p>GNU Afero General Public License 3.0 or newer, see <a
+<p>GNU Affero General Public License 3.0 or newer, see <a
 href="https://www.gnu.org/licenses/agpl-3.0.html#license-text"
 class="uri">https://www.gnu.org/licenses/agpl-3.0.html#license-text</a></p>
 <h2 id="questions-and-collaboration">Questions and collaboration</h2>
@@ -142,7 +134,7 @@ class="uri">https://www.gnu.org/licenses/agpl-3.0.html#license-text</a></p>
 class="citation" data-cites="GitHub">@GitHub</span></a></li>
 <li><a href="https://github.com/rsdoiel/BlogIt/issues">Help, Questions
 and Comments</a></li>
-<li><a href="https://rsdoiel.github.io/BlogIt">Documentation</a></li>
+<li><a href="./user_manual.html">Documentation</a></li>
 </ul>
 </section>
 </body>

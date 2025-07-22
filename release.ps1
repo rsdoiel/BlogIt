@@ -1,5 +1,5 @@
 <#
-generated with CMTools 0.0.1 b93a149e
+generated with CMTools 0.0.1 1ac9e32
 
 .SYNOPSIS
 Release script for BlogIt on GitHub using gh CLI.

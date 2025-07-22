@@ -177,4 +177,4 @@ The main module, `mod.ts`, will allow for processing the command line option and
 ## Reference
 
 - <https://github.com/rsdoiel/BlogIt>
-- [Website](https://rsdoiel/github.com/BlogIt)
+- [Website](https://rsdoiel.github.io/BlogIt)

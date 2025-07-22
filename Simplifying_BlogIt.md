@@ -15,13 +15,15 @@ abstract: |
   2. Copy CommonMark files into the blog directory tree
 
   Other tools can aggregate blog metadata like [FlatLake](https://flatlake.app).
-dateCreated: 2025-07-12
-dateModified: 2025-07-21
+series: Deno and TypeScript
+seriesNo: 9
+dateCreated: 2025-07-12T00:00:00.000Z
+dateModified: '2025-07-21'
 keywords:
   - font matter
   - CommonMark
   - blog
-datePublished: 2025-07-21
+datePublished: '2025-07-21'
 ---
 
 # Simplifying BlogIt
@@ -171,3 +173,8 @@ The module also supports an Object called CMarkDoc that include a pre-processor 
 The main module, `mod.ts`, will allow for processing the command line option and performing the requested actions.
 
 @include-code-block mod.ts TypeScript
+
+## Reference
+
+- <https://github.com/rsdoiel/BlogIt>
+- [Website](https://rsdoiel/github.com/BlogIt)

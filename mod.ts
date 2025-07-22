@@ -19,8 +19,9 @@
 // mod.ts
 import { parse as parseArgs } from "@std/flags";
 import { exists } from "@std/fs/exists";
+import * as yaml from "@std/yaml";
 import { checkDirectory, checkFile, createBackup, publishFile } from "./src/blogit.ts";
-import { Metadata, editFrontMatter } from "./src/frontMatter.ts";
+import { Metadata, editFrontMatter, applyDefaults } from "./src/frontMatter.ts";
 import {
   CommonMarkDoc,
   commonMarkDocPreprocessor,
@@ -33,20 +34,23 @@ import { helpText, fmtHelp } from "./helptext.ts";
 async function main() {
   const appName = 'BlogIt';
   const args = parseArgs(Deno.args, {
-    boolean: ["help", "version", "license", "draft", "check", "edit", "publish", "process" ],
-    string: ["prefix"],
+    boolean: ["help", "version", "license", "draft", "check", "edit", "publish", "process", "show" ],
+    string: ["prefix", "apply"],
     alias: {
       h: "help",
       v: "version",
       l: "license",
+      a: "apply",
       p: "prefix",
       c: "check",
       d: "draft",
       e: "edit",
       pp: "process",
+      s: "show",
     },
     default: {
       prefix: "blog",
+      apply: "",
     },
   });
 
@@ -69,6 +73,16 @@ async function main() {
 
   // Handle verb commands without dash prefix.
   switch (args._[0] as string) {
+    case "apply":
+      // Shift "apply" off the args, then assign the value from the next parameter
+      args._.shift();
+      if (args._[0] !== undefined) {
+        args.apply = args._.shift() as string;
+      } else {
+        console.error(`Missing defaults YAML filename`);
+        Deno.exit(1);
+      }
+      break;
     case "check":
       args.check = true;
       args._.shift();
@@ -87,6 +101,10 @@ async function main() {
       break;
     case "publish":
       args.publish = true
+      args._.shift();
+      break;
+    case "show":
+      args.show = true
       args._.shift();
       break;
   }
@@ -121,7 +139,7 @@ async function main() {
   const content = await Deno.readTextFile(filePath);
   const cmarkDoc: CommonMarkDoc = stringToCommonMarkDoc(content);
 
-  if (args.draft || args.edit) {
+  if (args.draft || args.edit || args.apply !== "") {
     // Set to draft is args.draft is true
     if (args.draft) {
       if (cmarkDoc.frontMatter.draft === false) {
@@ -131,11 +149,19 @@ async function main() {
       }
     }
 
+    // Apply defaults if requested
+    if (args.apply !== "") {
+      const data = await Deno.readTextFile(args.apply);
+      const dafaults: Record<string, unknown> = yaml.parse(data) as Record<string, unknown>;
+      applyDefaults(cmarkDoc, dafaults);
+    }
+
     // if args.edit then edit the front matter
     if (args.edit) {
       const fields = args._.slice(1) as Array<keyof Metadata>; // Explicitly assert fields as string array
       await editFrontMatter(cmarkDoc, fields);
     }
+
 
     // NOTE: either edit or draft setting caused a change, backup, write it out and exit
     if (cmarkDoc.changed) {
@@ -146,6 +172,16 @@ async function main() {
         await Deno.writeTextFile(filePath, commonMarkDocToString(cmarkDoc));
         console.log(`Wrote ${filePath}`);
       }
+    }
+    // NOTE: edit, draft and apply are terminating actions but do support show
+    if (args.show) {
+      console.log(yaml.stringify(cmarkDoc.frontMatter,
+        {
+          indent: 2,
+          compatMode: false,
+          sortKeys: true
+        }
+      ));
     }
     Deno.exit(0);
   }
@@ -170,6 +206,7 @@ async function main() {
       Deno.exit(1);
     }
     console.log(src);
+    Deno.exit(0);
   }
 }
 

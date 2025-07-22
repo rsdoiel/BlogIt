@@ -50,6 +50,10 @@ export const helpText =
 document. When you're ready to publish (when the front matter validates) it'll copy
 the document into a blog directory structure.
 
+You can provides a defaults for front matter for {app_name} by providing a YAML
+file with the name of "{app_name}.yaml". It will be the default values for front matter
+fields.
+
 # OPTIONS
 
 Options come as the last parameter(s) on the command line.
@@ -66,6 +70,9 @@ Options come as the last parameter(s) on the command line.
 --prefix, -p
 : Set an explicit path to the "blog" directory.
 
+apply, --apply, -a YAML_FILENAME
+: This will apply the YAML_FILENAME as default values in the front matter of a COMMONMARK_FILE.
+
 check, --check, -c
 : check COMMONMARK_FILE or directory PATH expected front matter reporting problems.
 
@@ -78,14 +85,23 @@ edit, --edit, -e
 process, --process, -pp
 : run COMMONMARK_FILE through the pre-processor writing the result to standard output.
 
+show
+: Display (pretty print) the front matter for the given COMMONMARK_FILE.
+
 publish
 : Run the publication process. If front matter pass validation the original front matter will be updated
 the published file will be written to the blog directory tree. This can be combined with the process option
 to run the pre-processor on the file before writing to the directory tree.
 
+# CONFIGURATION
+
+{app_name} will look for a "{app_name}.yaml" file in the current directory of where {app_name} is being executed.
+The file's YAML provides minimum front matter default values. To apply the defaults from {app_name}.yaml you use the
+apply action.
+
 # EXAMPLES
 
-front matter into your blog's directory tree.
+## Setting up a blog
 
 Here's an example of creating a blog from scratch while levaraging __BlogIt__
 
@@ -106,10 +122,19 @@ BlogIt publish $HOME/Document/FirstPost.md
 tree blog
 ~~~
 
-You are ready to run [FlatLake](https://flatlake.app) to render your blog's JSON API. You can
-then generate your RSS feeds and sitemap from the JSON API.
+You are ready to run additional processing like [FlatLake](https://flatlake.app)
+to render your blog's JSON API, [Pandoc](https://pandoc.org) to render HTML and 
+[PageFind](https://pagefind.com) to complete your website.
 
-Run a CommonMark to HTML converter like Pandoc on the CommonMark files to produce HTML.
-Then you're ready to run [PageFind](https://pagefind.com) for search support.
+## Apply default front matter
+
+Here is an example of using the "apply" action front matter values.
+
+1. create a "defaults.yaml" file
+2. Apply the defaults to the post "FirstPost.md"
+
+~~~shell
+{app_name} --apply=defaults.yaml FirstPost.md
+~~~
 
 `;

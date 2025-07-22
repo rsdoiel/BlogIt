@@ -199,3 +199,26 @@ export async function editFrontMatter(
 ) {
   await promptToEditFields(cmarkDoc, fields);
 }
+
+export function applyDefaults(cmarkDoc: CommonMarkDoc, defaults: Record<string, unknown>) {
+  for (const k of Object.keys(defaults)) {
+    switch (cmarkDoc.frontMatter[k]) {
+      case undefined:
+        cmarkDoc.frontMatter[k] = defaults[k];
+        cmarkDoc.changed = true;
+        break;
+      case null:
+        cmarkDoc.frontMatter[k] = defaults[k];
+        cmarkDoc.changed = true;
+        break;
+      case '':
+        cmarkDoc.frontMatter[k] = defaults[k];
+        cmarkDoc.changed = true;
+        break;
+      case 0:
+        cmarkDoc.frontMatter[k] = defaults[k];
+        cmarkDoc.changed = true;
+        break;
+    }
+  }
+}

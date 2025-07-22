@@ -26,6 +26,9 @@
 <p>BlogIt provides a means of currating front matter in a CommonMark or
 Markdown document. When you’re ready to publish (when the front matter
 validates) it’ll copy the document into a blog directory structure.</p>
+<p>You can provides a defaults for front matter for BlogIt by providing
+a YAML file with the name of “BlogIt.yaml”. It will be the default
+values for front matter fields.</p>
 <h1 id="options">OPTIONS</h1>
 <p>Options come as the last parameter(s) on the command line.</p>
 <dl>
@@ -44,6 +47,11 @@ display license
 <dt>–prefix, -p</dt>
 <dd>
 Set an explicit path to the “blog” directory.
+</dd>
+<dt>apply, –apply, -a YAML_FILENAME</dt>
+<dd>
+This will apply the YAML_FILENAME as default values in the front matter
+of a COMMONMARK_FILE.
 </dd>
 <dt>check, –check, -c</dt>
 <dd>
@@ -64,6 +72,10 @@ Edit specific front matter fields in a CommonMark file use FIELD_LIST.
 run COMMONMARK_FILE through the pre-processor writing the result to
 standard output.
 </dd>
+<dt>show</dt>
+<dd>
+Display (pretty print) the front matter for the given COMMONMARK_FILE.
+</dd>
 <dt>publish</dt>
 <dd>
 Run the publication process. If front matter pass validation the
@@ -73,8 +85,13 @@ to run the pre-processor on the file before writing to the directory
 tree.
 </dd>
 </dl>
+<h1 id="configuration">CONFIGURATION</h1>
+<p>BlogIt will look for a “BlogIt.yaml” file in the current directory of
+where BlogIt is being executed. The file’s YAML provides minimum front
+matter default values. To apply the defaults from BlogIt.yaml you use
+the apply action.</p>
 <h1 id="examples">EXAMPLES</h1>
-<p>front matter into your blog’s directory tree.</p>
+<h2 id="setting-up-a-blog">Setting up a blog</h2>
 <p>Here’s an example of creating a blog from scratch while levaraging
 <strong>BlogIt</strong></p>
 <pre class="shell"><code># Pick an editor, example nano in the case
@@ -91,12 +108,18 @@ BlogIt check $HOME/Documents/FirstPost.md
 BlogIt publish $HOME/Document/FirstPost.md
 # See the blog post ready in your blog directory
 tree blog</code></pre>
-<p>You are ready to run <a href="https://flatlake.app">FlatLake</a> to
-render your blog’s JSON API. You can then generate your RSS feeds and
-sitemap from the JSON API.</p>
-<p>Run a CommonMark to HTML converter like Pandoc on the CommonMark
-files to produce HTML. Then you’re ready to run <a
-href="https://pagefind.com">PageFind</a> for search support.</p>
+<p>You are ready to run additional processing like <a
+href="https://flatlake.app">FlatLake</a> to render your blog’s JSON API,
+<a href="https://pandoc.org">Pandoc</a> to render HTML and <a
+href="https://pagefind.com">PageFind</a> to complete your website.</p>
+<h2 id="apply-default-front-matter">Apply default front matter</h2>
+<p>Here is an example of using the “apply” action front matter
+values.</p>
+<ol type="1">
+<li>create a “defaults.yaml” file</li>
+<li>Apply the defaults to the post “FirstPost.md”</li>
+</ol>
+<pre class="shell"><code>BlogIt --apply=defaults.yaml FirstPost.md</code></pre>
 </section>
 </body>
 </html>

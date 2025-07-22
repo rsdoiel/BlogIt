@@ -32,7 +32,6 @@ export const metadataFields: Array<keyof Metadata> = [
   "keywords",
   "series",
   "seriesNo",
-  "pubType",
   "copyrightYear",
   "copyrightHolder",
   "license"

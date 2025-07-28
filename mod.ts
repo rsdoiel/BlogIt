@@ -20,7 +20,7 @@
 import { parse as parseArgs } from "@std/flags";
 import { exists } from "@std/fs/exists";
 import * as yaml from "@std/yaml";
-import { checkDirectory, checkFile, createBackup, publishFile } from "./src/blogit.ts";
+import { checkDirectory, checkFile, createBackup, publishFile, showFrontMatter } from "./src/blogit.ts";
 import { Metadata, editFrontMatter, applyDefaults } from "./src/frontMatter.ts";
 import {
   CommonMarkDoc,
@@ -45,7 +45,7 @@ async function main() {
       c: "check",
       d: "draft",
       e: "edit",
-      pp: "process",
+      P: "process",
       s: "show",
     },
     default: {
@@ -162,7 +162,8 @@ async function main() {
       await editFrontMatter(cmarkDoc, fields);
     }
 
-
+  	// Display the front matter
+    showFrontMatter(cmarkDoc);
     // NOTE: either edit or draft setting caused a change, backup, write it out and exit
     if (cmarkDoc.changed) {
       if (confirm(`save ${filePath}?`)) {
@@ -173,16 +174,12 @@ async function main() {
         console.log(`Wrote ${filePath}`);
       }
     }
-    // NOTE: edit, draft and apply are terminating actions but do support show
-    if (args.show) {
-      console.log(yaml.stringify(cmarkDoc.frontMatter,
-        {
-          indent: 2,
-          compatMode: false,
-          sortKeys: true
-        }
-      ));
-    }
+    Deno.exit(0);
+  }
+
+  if (args.show) {
+    // Display the front matter
+    showFrontMatter(cmarkDoc);
     Deno.exit(0);
   }
 

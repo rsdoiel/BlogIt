@@ -41,8 +41,8 @@ contacts:
     email: rsdoiel@gmail.com
 
 repository-code: "https://github.com/rsdoiel/BlogIt"
-version: 0.0.1
-date-released: 2025-07-21
+version: 0.0.2
+date-released: 2025-07-28
 
 license-url: "https://www.gnu.org/licenses/agpl-3.0.html#license-text"
 keywords:

@@ -108,21 +108,25 @@ function assignValue<T extends keyof Metadata>(
     case "datePublished":
       if (newValue.trim() !== '' && yyyymmdd(newValue.trim())) {
         frontMatter[field] = newValue.trim();
+        delete frontMatter['draft'];
       } else {
         delete frontMatter[field];
       }
-      //frontMatter[field] = (new Date(newValue)).toISOString().split("T")[0];
       break;
     default:
       frontMatter[field] = newValue.trim();
+      break;
   }
 }
 
-function getDefaultValueAsString(field: string): string {
+function getDefaultValueAsString(frontMatter: Record<string, unknown>, field: string): string {
   switch (field) {
     case "draft":
-      //NOTE: The default value is draft === true
-      return "true";
+	  if (frontMatter.datePublished === undefined || frontMatter.datePublished === null || frontMatter.datePublished === '') {
+      	//NOTE: The default value is draft === true
+      	return "true";
+	  }
+	  return '';
     case "dateCreated":
     case "dateModified":
       return (new Date()).toISOString().split("T")[0];
@@ -160,8 +164,12 @@ async function promptToEditFields(
 
   let changed = false;
   for (const key of keys) {
+    // dateModified gets updated when the changed record is saved. We can skip it.
+    if (key === 'dateModified') {
+      continue
+    }
     if (cmarkDoc.frontMatter[key] === undefined) {
-      assignValue(cmarkDoc.frontMatter, key, getDefaultValueAsString(key));
+      assignValue(cmarkDoc.frontMatter, key, getDefaultValueAsString(cmarkDoc.frontMatter, key));
     }
     // NOTE: draft and pub date are connected. A draft can't have a datePublished
     if (key === 'draft' && cmarkDoc.frontMatter.draft)  {

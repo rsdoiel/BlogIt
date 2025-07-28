@@ -19,11 +19,14 @@
 </nav>
 <section>
 <h1 id="simplifying-blogit">Simplifying BlogIt</h1>
+<p>By R. S. Doiel, 2025-07-21</p>
+<p>NOTE: This post was updated to include minor bug fixes, RSD
+2025-07-28.</p>
 <p><strong>BlogIt</strong> is a command I’ve written many times over the
-years. Previous it was intended to perform two tasks.</p>
+years. Previously it was intended to perform two tasks.</p>
 <ol type="1">
 <li>Copy CommonMark documents into a blog directory tree</li>
-<li>Aggregate metadata from the document (front matter) for my blog</li>
+<li>Aggregate metadata from the document for my blog</li>
 </ol>
 <p>I am updating the way my website and blog are is built. I am adopting
 <a href="https://flatlake.app">FlatLake</a> for fulfill the role of
@@ -32,9 +35,9 @@ am relying on an off the shelf tool to perform front matter aggregation
 it becomes more important to make the front matter consist. The new
 priorities for <strong>BlogIt</strong> are.</p>
 <ol type="1">
-<li>Curating the front matter of CommonMark documents</li>
-<li>Publishing (staging) CommonMark documents in the blog directory
-tree</li>
+<li>Curating the front matter of the CommonMark document</li>
+<li>When ready to publish, update the front matter and Copy CommonMark
+document into the blog directory tree</li>
 </ol>
 <p>With curating front matter the priority some additional features will
 be helpful.</p>
@@ -54,7 +57,6 @@ matter</li>
 <li>license</li>
 <li>prefix BLOG_BASE_PATH (to set an explicit path to the “blog”
 directory)</li>
-<li>process (run the processor over the CommonMark document)</li>
 </ul>
 <h2 id="action">ACTION</h2>
 <p>The following actions need to be supported in the new
@@ -74,18 +76,16 @@ date</li>
 <ul>
 <li>edit all or a subset of standard front matter fields</li>
 </ul></li>
-<li>process COMMONMARK_FILE
-<ul>
-<li>resolve the links to markdown files with HTML links</li>
-<li>include embedded code blocks</li>
-</ul></li>
 <li>publish COMMONMARK_FILE
 <ul>
 <li>read front matter</li>
 <li>set draft to false</li>
 <li>set publish date and update modified date</li>
 <li>validate front matter</li>
-<li>on success, save the updates then copy into blog directory tree</li>
+<li>on success, save the updates then copy into blog directory tree
+<ul>
+<li>prompt if it will overwrite a file</li>
+</ul></li>
 </ul></li>
 </ul>
 <h2 id="editing-front-matter">Editing front matter</h2>
@@ -105,7 +105,7 @@ started almost a decade ago. Essentially it is title, author, abstract,
 dateCreated, dateModified, datePublished and keywords. Some blog items
 have a series name and number so I will support those fields as
 well.</p>
-<p><strong>BlogIt</strong> will be written in TypeScript this time so I
+<p><strong>BlogIt</strong> will be written in TypeScript this time. I
 can cover my bases with the following interfaces.</p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* This describes the front matter metadata object */</span></span>
@@ -147,20 +147,20 @@ time the CommonMark document is “published” into the blog directory
 tree. This also results in the draft field being removed.</li>
 </ul>
 <p>Recursive blog maintenance could be supported by allowing the tool to
-walk a directory tree and when it encounters CommonMark document it
-checks and validates the front matter. This feature would ensure that
-the CommonMark documents are ready for FlatLake processing as I migrate
-my site build process.</p>
+walk a directory tree and when it encounters CommonMark documents the
+front matter is validate. Errors are written to standard out. This
+feature would ensure that the CommonMark documents are ready for
+processing by the website build process.</p>
 <h2 id="checking-for-front-matter">Checking for Front Matter</h2>
 <p>Front Matter traditionally is found at the start of the CommonMark
 file. It starts with the a line matching <code>---</code> and terminates
 with same <code>---</code> line. Anything between the two is treated as
 YAML. Checking the front matter means identifying the YAML source,
-parsing it and the walking the object produced to compare it with the
-interface expected. If an expected field is missing then prompt for it
-and if the response is “y” create a temp file of the content (or example
-content) and invoke a default editor for the system. When the editor is
-exited the source is read back in and the front matter is updated.</p>
+parsing it and comparing the result with the interface definition. If an
+expected field is missing then prompt for it and if the response is “y”
+create a temp file of the content and invoke a default editor for the
+system. When the editor is exited the source is read back in and the
+front matter is updated.</p>
 <h2 id="processing-the-front-matter">Processing the Front Matter</h2>
 <p>Aside from extracting the YAML front matter from the text, the
 standard Deno library (<code>@std/yaml</code>) can be used to populate
@@ -195,7 +195,7 @@ sub process should be implemented as it’s own module. This will allow me
 to improve the process independently and potentially use it in other
 applications.</p>
 <p><span class="citation"
-data-cites="insert-code-block">@insert-code-block</span> src/editor.ts
+data-cites="include-code-block">@include-code-block</span> src/editor.ts
 TypeScript</p>
 <h3 id="front-matter-1">Front Matter</h3>
 <p>The front matter handling is implemented as it’s own TypeScript
@@ -213,7 +213,7 @@ uniform way. This is accomplished through a TypeScript module called
 <code>CommonMarkDoc</code> that contains three attributes,
 <code>frontMatter</code>, <code>markdown</code> and
 <code>changed</code>. The latter is a boolean flag that is set when
-something changes in the either <code>frontMatter</code> or
+something changes in either <code>frontMatter</code> or
 <code>markdown</code>.</p>
 <p>The module also supports an Object called CMarkDoc that include a
 pre-processor function called <code>process</code> providing two useful

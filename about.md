@@ -37,7 +37,7 @@ maintainer:
     id: https://orcid.org/0000-0003-0900-6903
 
 repository_code: https://github.com/rsdoiel/BlogIt
-version: 0.0.2
+version: 0.0.3
 license_url: https://www.gnu.org/licenses/agpl-3.0.html#license-text
 
 programming_language:
@@ -55,9 +55,9 @@ date_released: 2025-07-28
 About this software
 ===================
 
-## BlogIt 0.0.2
+## BlogIt 0.0.3
 
-Added missing prompt to overwrite file on publish. Added support for &#x60;@include-text-block&#x60; and improved error handling reading included files.
+Added generation of default front matter when you use the draft action.
 
 ### Authors
 

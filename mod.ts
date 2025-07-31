@@ -21,7 +21,7 @@ import { parse as parseArgs } from "@std/flags";
 import { exists } from "@std/fs/exists";
 import * as yaml from "@std/yaml";
 import { checkDirectory, checkFile, createBackup, publishFile, showFrontMatter } from "./src/blogit.ts";
-import { Metadata, editFrontMatter, applyDefaults } from "./src/frontMatter.ts";
+import { Metadata, editFrontMatter, applyDefaults, getFileCreationDate } from "./src/frontMatter.ts";
 import {
   CommonMarkDoc,
   commonMarkDocPreprocessor,
@@ -30,6 +30,7 @@ import {
 } from "./src/commonMarkDoc.ts";
 import { licenseText, releaseDate, releaseHash, version } from "./version.ts";
 import { helpText, fmtHelp } from "./helptext.ts";
+
 
 async function main() {
   const appName = 'BlogIt';
@@ -138,11 +139,23 @@ async function main() {
 
   const content = await Deno.readTextFile(filePath);
   const cmarkDoc: CommonMarkDoc = stringToCommonMarkDoc(content);
+  const today = (new Date()).toISOString().split('T')[0];
 
+  if (cmarkDoc.frontMatter.dateCreated === undefined) {
+    // Get the file creation date
+    let fileDateCreated = await (getFileCreationDate(filePath));
+    if (fileDateCreated == null) {
+      cmarkDoc.frontMatter.dateCreated = today;
+    } else {
+      cmarkDoc.frontMatter.dateCreated = fileDateCreated.toISOString().split('T')[0];
+    }
+    cmarkDoc.changed = true;
+  }
   if (args.draft || args.edit || args.apply !== "") {
     // Set to draft is args.draft is true
     if (args.draft) {
-      if (cmarkDoc.frontMatter.draft === false) {
+      console.log(`DEBUG cmarkDoc.frontMatter -> ${JSON.stringify(cmarkDoc.frontMatter)}`);
+      if (cmarkDoc.frontMatter.draft === undefined || cmarkDoc.frontMatter.draft === false) {
         cmarkDoc.frontMatter.draft = true;
         delete cmarkDoc.frontMatter.datePublished;
         cmarkDoc.changed = true;
@@ -160,6 +173,10 @@ async function main() {
     if (args.edit) {
       const fields = args._.slice(1) as Array<keyof Metadata>; // Explicitly assert fields as string array
       await editFrontMatter(cmarkDoc, fields);
+    }
+    if (cmarkDoc.frontMatter.dateModified === undefined) {
+      cmarkDoc.frontMatter.dateModified = today;
+      cmarkDoc.changed = true;
     }
 
   	// Display the front matter

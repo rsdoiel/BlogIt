@@ -1,6 +1,6 @@
-%BlogIt(1) user manual | version 0.0.2 0f77403
+%BlogIt(1) user manual | version 0.0.3 fe85f97
 % R. S. Doiel
-% 2025-07-28
+% 2025-07-30
 
 # NAME
 

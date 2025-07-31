@@ -1,8 +1,8 @@
 // BlogIt version and license information.
 
-export const version: string = '0.0.2',
-releaseDate: string = '2025-07-28',
-releaseHash: string = '0f77403',
+export const version: string = '0.0.3',
+releaseDate: string = '2025-07-30',
+releaseHash: string = 'fe85f97',
 licenseText: string = `
                     GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007

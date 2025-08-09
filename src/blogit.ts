@@ -16,8 +16,9 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { copy, ensureDir, walk } from "@std/fs";
+import { copy, ensureDir, walk, exists } from "@std/fs";
 import * as path from "@std/path";
+import * as yaml from "@std/yaml";
 import { metadataFields } from "./frontMatter.ts";
 import {
   CommonMarkDoc,
@@ -80,6 +81,13 @@ export async function publishFile(
   if (preprocesor) {
     await Deno.writeTextFile(`${targetDir}/${path.basename(filePath)}`, commonMarkDocPreprocessor(cmarkDoc));
     return;
+  }
+  const targetFName = `${targetDir}/${path.basename(filePath)}`;
+  if (await exists(targetFName)) {
+	  if (confirm(`overwrite ${targetFName}?`)) {
+  		await copy(filePath, `${targetDir}/${path.basename(filePath)}`, {overwrite: true});
+	  }
+	  return;
   }
   await copy(filePath, `${targetDir}/${path.basename(filePath)}`);
 }
@@ -239,4 +247,16 @@ export async function checkDirectory(dirPath: string) {
       res.ok ? "" : console.log(`${entry.path}: ${res.error}`);
     }
   }
+}
+
+export function showFrontMatter(cmarkDoc: CommonMarkDoc) {
+  console.log(`
+%c${yaml.stringify(cmarkDoc.frontMatter,
+      {
+        indent: 2,
+        compatMode: false,
+        sortKeys: true
+      }
+)}
+`, "font-weight: bold");
 }

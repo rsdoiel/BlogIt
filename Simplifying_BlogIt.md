@@ -15,28 +15,31 @@ abstract: |
   2. Copy CommonMark files into the blog directory tree
 
   Other tools can aggregate blog metadata like [FlatLake](https://flatlake.app).
-series: Deno and TypeScript
-seriesNo: 9
-dateCreated: 2025-07-12T00:00:00.000Z
-dateModified: '2025-07-21'
+dateCreated: 2025-07-12
+dateModified: '2025-07-28'
 keywords:
   - font matter
   - CommonMark
   - blog
+  - CommonMarkDoc
 datePublished: '2025-07-21'
 ---
 
 # Simplifying BlogIt
 
-__BlogIt__ is a command I've written many times over the years. Previous it was intended to perform two tasks.
+By R. S. Doiel, 2025-07-21
+
+NOTE: This post was updated to include minor bug fixes, RSD 2025-07-28.
+
+__BlogIt__ is a command I've written many times over the years. Previously it was intended to perform two tasks.
 
 1. Copy CommonMark documents into a blog directory tree
-2. Aggregate metadata from the document (front matter) for my blog
+2. Aggregate metadata from the document for my blog
 
 I am updating the way my website and blog are is built. I am adopting [FlatLake](https://flatlake.app) for fulfill the role of aggregator. This changes the role __BlogIt__ plays.  Since I am relying on an off the shelf tool to perform front matter aggregation it becomes more important to make the front matter consist. The new priorities for __BlogIt__ are.
 
-1. Curating the front matter of CommonMark documents
-2. Publishing (staging) CommonMark documents in the blog directory tree
+1. Curating the front matter of the CommonMark document
+2. When ready to publish, update the front matter and Copy CommonMark document into the blog directory tree
 
 With curating front matter the priority some additional features will be helpful.
 
@@ -57,7 +60,6 @@ blogit [OPTIONS] ACTION COMMONMARK_FILE [DATE_OF_POST]
 - version
 - license
 - prefix BLOG_BASE_PATH (to set an explicit path to the "blog" directory)
-- process (run the processor over the CommonMark document)
 
 ## ACTION
 
@@ -69,15 +71,13 @@ The following actions need to be supported in the new implementation.
   -  set the front matter draft attribute to true, clear the published date
 - edit COMMONMARK_FILE [FRONT_MATTER_FIELD ...]
   - edit all or a subset of standard front matter fields
-- process COMMONMARK_FILE
-  - resolve the links to markdown files with HTML links
-  - include embedded code blocks
 - publish COMMONMARK_FILE
   - read front matter
   - set draft to false
   - set publish date and update modified date
   - validate front matter
   - on success, save the updates then copy into blog directory tree
+    - prompt if it will overwrite a file
 
 ## Editing front matter
 
@@ -89,7 +89,7 @@ Complex fields like keywords are provided to the text edit as YAML. The default 
 
 The basic front matter I want to use is straight forward as my blog started almost a decade ago. Essentially it is title, author, abstract, dateCreated, dateModified, datePublished and keywords. Some blog items have a series name and number so I will support those fields as well.
 
-__BlogIt__ will be written in TypeScript this time so I can cover my bases with the following interfaces.
+__BlogIt__ will be written in TypeScript this time. I can cover my bases with the following interfaces.
 
 ~~~TypeScript
 /* This describes the front matter metadata object */
@@ -118,11 +118,11 @@ BlogIt expectations
 - the default date is today, may explicitly be provided by the front matter as `.datePublished`
 - the date fields automatically supported are `dateCreated`, `dateModified` and `datePublished`. The `dateModified` should be updated automatically each time __BlogIt__ changes the document. `dateCreated` is set the first time the front matter is created or edited.  `datePublished` is set the first time the CommonMark document  is "published" into the blog directory tree. This also results in the draft field being removed.
 
-Recursive blog maintenance could be supported by allowing the tool to walk a directory tree and when it encounters CommonMark document it checks and validates the front matter. This feature would ensure that the CommonMark documents are ready for FlatLake processing as I migrate my site build process.
+Recursive blog maintenance could be supported by allowing the tool to walk a directory tree and when it encounters CommonMark documents the front matter is validate. Errors are written to standard out. This feature would ensure that the CommonMark documents are ready for processing by the website build process.
 
 ## Checking for Front Matter
 
-Front Matter traditionally is found at the start of the CommonMark file. It starts with the a line matching `---` and terminates with same `---` line. Anything between the two is treated as YAML.  Checking the front matter means identifying the YAML source, parsing it and the walking the object produced to compare it with the interface expected. If an expected field is missing then prompt for it and if the response is "y" create a temp file of the content (or example content) and invoke a default editor for the system. When the editor is exited the source is read back in and the front matter is updated.
+Front Matter traditionally is found at the start of the CommonMark file. It starts with the a line matching `---` and terminates with same `---` line. Anything between the two is treated as YAML.  Checking the front matter means identifying the YAML source, parsing it and comparing the result with the interface definition. If an expected field is missing then prompt for it and if the response is "y" create a temp file of the content and invoke a default editor for the system. When the editor is exited the source is read back in and the front matter is updated.
 
 ## Processing the Front Matter
 
@@ -148,7 +148,7 @@ The action "publish" will remove the `draft` attribute setting the publication a
 
 Calling out to the system's text editor and running the editor as a sub process should be implemented as it's own module. This will allow me to improve the process independently and potentially use it in other applications.
 
-@insert-code-block src/editor.ts TypeScript
+@include-code-block src/editor.ts TypeScript
 
 ### Front Matter
 
@@ -159,7 +159,7 @@ The front matter handling is implemented as it's own TypeScript module, `frontMa
 ### CommonMark module
 
 My website is implemented using CommonMark documents that include front matter. It is helpful to be able to handle the documents 
-in a uniform way. This is accomplished through a TypeScript module called `commonMarkDoc.ts`.  It defines an interface, `CommonMarkDoc` that contains three attributes, `frontMatter`, `markdown` and `changed`. The latter is a boolean flag that is set when something changes in the either `frontMatter` or `markdown`.
+in a uniform way. This is accomplished through a TypeScript module called `commonMarkDoc.ts`.  It defines an interface, `CommonMarkDoc` that contains three attributes, `frontMatter`, `markdown` and `changed`. The latter is a boolean flag that is set when something changes in either `frontMatter` or `markdown`.
 
 The module also supports an Object called CMarkDoc that include a pre-processor function called `process` providing two useful features.
 

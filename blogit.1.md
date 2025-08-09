@@ -1,6 +1,6 @@
-%BlogIt(1) user manual | version 0.0.1 2ef3d9a
+%BlogIt(1) user manual | version 0.0.3 fe85f97
 % R. S. Doiel
-% 2025-07-21
+% 2025-07-30
 
 # NAME
 
@@ -48,7 +48,7 @@ draft, --draft, -d
 edit, --edit, -e
 : Edit specific front matter fields in a CommonMark file use FIELD_LIST.
 
-process, --process, -pp
+process, --process, -P
 : run COMMONMARK_FILE through the pre-processor writing the result to standard output.
 
 show

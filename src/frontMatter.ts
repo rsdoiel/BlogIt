@@ -20,6 +20,19 @@ import { parse, stringify } from "@std/yaml";
 import { CommonMarkDoc } from "./commonMarkDoc.ts";
 import { editTempData } from "./editor.ts";
 
+export async function getFileCreationDate(filePath: string): Promise<Date | null> {
+  try {
+    // Get file information
+    const fileInfo = await Deno.lstat(filePath);
+
+    // Return the creation date
+    return fileInfo.birthtime;
+  } catch (err) {
+    console.error(`Error getting file creation date: ${err}`);
+    return null;
+  }
+}
+
 export const metadataFields: Array<keyof Metadata> = [
   "title",
   "author",
@@ -104,28 +117,42 @@ function assignValue<T extends keyof Metadata>(
       }
       break;
     case "dateCreated":
+      const dtCreated = new Date(newValue);
+      if (isNaN(dtCreated.valueOf())) return false;
+      frontMatter[field] = dtCreated.toISOString().split('T')[0] as string;
+      break;
     case "dateModified":
+      const dtModified = new Date(newValue);
+      if (isNaN(dtModified.valueOf())) return false;
+      frontMatter[field] = dtModified.toISOString().split('T')[0];
+      break;
     case "datePublished":
       if (newValue.trim() !== '' && yyyymmdd(newValue.trim())) {
         frontMatter[field] = newValue.trim();
+        delete frontMatter['draft'];
       } else {
         delete frontMatter[field];
       }
-      //frontMatter[field] = (new Date(newValue)).toISOString().split("T")[0];
       break;
     default:
       frontMatter[field] = newValue.trim();
+      break;
   }
 }
 
-function getDefaultValueAsString(field: string): string {
+function getDefaultValueAsString(frontMatter: Record<string, unknown>, field: string): string {
+  const today = (new Date()).toISOString().split('T')[0];
   switch (field) {
     case "draft":
-      //NOTE: The default value is draft === true
-      return "true";
+	  if (frontMatter.datePublished === undefined || frontMatter.datePublished === null || frontMatter.datePublished === '') {
+      	//NOTE: The default value is draft === true
+      	return "true";
+	  }
+	  return '';
     case "dateCreated":
+      return today as string;
     case "dateModified":
-      return (new Date()).toISOString().split("T")[0];
+      return today as string;
     default:
       return "";
   }
@@ -141,6 +168,10 @@ function getAttributeAsString(
   switch (field) {
     case "keywords":
       return stringify(frontMatter[field]);
+    case "dateCreated":
+    case "dateModified":
+    case "datePublished":
+      return (new Date(frontMatter[field] as string)).toISOString().split('T')[0] as string;
     case "seriesNo":
     case "copyrightYear":
     case "draft":
@@ -160,8 +191,13 @@ async function promptToEditFields(
 
   let changed = false;
   for (const key of keys) {
+    // dateModified gets updated when the changed record is saved. We can skip it.
+    if (key === 'dateModified') {
+      continue
+    }
     if (cmarkDoc.frontMatter[key] === undefined) {
-      assignValue(cmarkDoc.frontMatter, key, getDefaultValueAsString(key));
+      assignValue(cmarkDoc.frontMatter, key, getDefaultValueAsString(cmarkDoc.frontMatter, key));
+      console.log(`DEBUG assigning default value ${key} of ${cmarkDoc.frontMatter[key]}`);
     }
     // NOTE: draft and pub date are connected. A draft can't have a datePublished
     if (key === 'draft' && cmarkDoc.frontMatter.draft)  {
@@ -171,7 +207,7 @@ async function promptToEditFields(
     // It should default to today like dateCreated and dateModified do.
     if (key === 'datePublished' && cmarkDoc.frontMatter.datePublished === '') {
       if (cmarkDoc.frontMatter.draft === undefined || cmarkDoc.frontMatter.draft === false) {
-        cmarkDoc.frontMatter.datePublished = (new Date()).toISOString().split("T")[0];
+        cmarkDoc.frontMatter.datePublished = (new Date()).toISOString().split("T")[0] as string;
       }
     }
     // NOTE: we need to display the value in string form to prompt for editing.

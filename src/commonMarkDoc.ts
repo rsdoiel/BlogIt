@@ -78,12 +78,32 @@ export function commonMarkDocPreprocessor(
       return `[${linkText}](${htmlFilePath})`;
     });
 
-    // Insert code blocks from external files
-    const insertBlockRegex = /@include-code-block\s+([^\s]+)(?:\s+(\w+))?/g;
-    processedMarkdown = processedMarkdown.replace(insertBlockRegex, (_fullMatch, filePath, language = '') => {
-      const fileContent = Deno.readTextFileSync(filePath);
-      if (fileContent) {
+    // include code blocks from external files
+    const insertCodeBlockRegex = /@include-code-block\s+([^\s]+)(?:\s+(\w+))?/g;
+    processedMarkdown = processedMarkdown.replace(insertCodeBlockRegex, (_fullMatch, filePath, language = '') => {
+      let fileContent = '';
+      try {
+        fileContent = Deno.readTextFileSync(filePath);
+      } catch (error) {
+        return `Error reading ${filePath}, ${error}`;
+      }
+      if (fileContent !== '') {
         return `~~~${language}\n${fileContent}\n~~~`;
+      } else {
+        return `Error inserting block from ${filePath}`;
+      }
+    });
+    // include code blocks from external files
+    const insertTextBlockRegex = /@include-text-block\s+([^\s]+)(?:\s+(\w+))?/g;
+    processedMarkdown = processedMarkdown.replace(insertTextBlockRegex, (_fullMatch, filePath, language = '') => {
+      let fileContent = '';
+      try {
+        fileContent = Deno.readTextFileSync(filePath);
+      } catch (error) {
+        return `Error reading ${filePath}, ${error}`;
+      }
+      if (fileContent !== '') {
+        return fileContent;
       } else {
         return `Error inserting block from ${filePath}`;
       }
@@ -128,7 +148,7 @@ export class CMarkDoc implements CommonMarkDoc {
    * processSync is a CommonMark pre-processor implementing two features. It performs two
    * fucntions.
    *   1. converts links to markdown files (ext. ".md") to their HTML file counter parts
-   *   2. Any `@insert-code-block` will include a source code file block in the resulting
+   *   2. Any `@include-code-block` will include a source code file block in the resulting
    *      source document.
    */
   processSync(): string {

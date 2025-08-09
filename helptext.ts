@@ -82,7 +82,7 @@ draft, --draft, -d
 edit, --edit, -e
 : Edit specific front matter fields in a CommonMark file use FIELD_LIST.
 
-process, --process, -pp
+process, --process, -P
 : run COMMONMARK_FILE through the pre-processor writing the result to standard output.
 
 show

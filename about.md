@@ -24,7 +24,7 @@ tree blog
 ~~~
 
 Run a Common Mark to HTML converter like Pandoc on the Common Mark files to produce HTML. Then you&#x27;re ready to run [PageFind](https://pagefind.com) for search and 
-[FlatLake](https://flatlake.app) to render your blog&#x27;s JSON API."
+[FlatLake](https://flatlake.app) to render your blog&#x27;s JSON API. It also works with [antennaApp](https://rsdoiel.github.io/antennaApp)."
 authors:
   - family_name: Doiel
     given_name: Robert
@@ -37,7 +37,7 @@ maintainer:
     id: https://orcid.org/0000-0003-0900-6903
 
 repository_code: https://github.com/rsdoiel/BlogIt
-version: 0.0.3
+version: 0.0.4
 license_url: https://www.gnu.org/licenses/agpl-3.0.html#license-text
 
 programming_language:
@@ -49,15 +49,15 @@ keywords:
   - CommonMark
   - Markdown
 
-date_released: 2025-07-28
+date_released: 2025-09-11
 ---
 
 About this software
 ===================
 
-## BlogIt 0.0.3
+## BlogIt 0.0.4
 
-Added generation of default front matter when you use the draft action.
+Added support for description, postPath, pubDate in front matter for compatibility with antennaApp.
 
 ### Authors
 
@@ -95,7 +95,7 @@ tree blog
 ~~~
 
 Run a Common Mark to HTML converter like Pandoc on the Common Mark files to produce HTML. Then you&#x27;re ready to run [PageFind](https://pagefind.com) for search and 
-[FlatLake](https://flatlake.app) to render your blog&#x27;s JSON API.
+[FlatLake](https://flatlake.app) to render your blog&#x27;s JSON API. It also works with [antennaApp](https://rsdoiel.github.io/antennaApp).
 
 - License: <https://www.gnu.org/licenses/agpl-3.0.html#license-text>
 - GitHub: <https://github.com/rsdoiel/BlogIt>
@@ -110,13 +110,13 @@ Run a Common Mark to HTML converter like Pandoc on the Common Mark files to prod
 
 ### Software Requirements
 
-- Deno &gt;&#x3D; 2.4.2
-- Git &gt;&#x3D; 2.3
+- Deno >= 2.5.0
+- Git >= 2.3
 
 
 ### Software Suggestions
 
-- CMTools &gt;&#x3D; v0.0.35
+- CMTools &gt;&#x3D; v0.0.40
 - Pandoc &gt;&#x3D; 3.6
 
 

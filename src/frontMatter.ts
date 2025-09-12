@@ -47,7 +47,10 @@ export const metadataFields: Array<keyof Metadata> = [
   "seriesNo",
   "copyrightYear",
   "copyrightHolder",
-  "license"
+  "license",
+  "postPath",
+  "description",
+  "pubDate"
 ];
 
 
@@ -67,6 +70,9 @@ export interface Metadata {
   copyrightYear?: number;
   copyrightHolder?: string;
   license?: string | URL;
+  postPath?: string;
+  description?: string;
+  pubDate?: string;
 }
 
 
@@ -86,6 +92,12 @@ function assignValue<T extends keyof Metadata>(
     return;
   }
   switch (field) {
+    case "pubDate":
+      frontMatter[field] = newValue;
+      break;
+    case "description":
+      frontMatter[field] = newValue;
+      break;
     case "abstract":
       frontMatter[field] = newValue;
       break;
@@ -168,6 +180,7 @@ function getAttributeAsString(
   switch (field) {
     case "keywords":
       return stringify(frontMatter[field]);
+    case "pubDate":
     case "dateCreated":
     case "dateModified":
     case "datePublished":

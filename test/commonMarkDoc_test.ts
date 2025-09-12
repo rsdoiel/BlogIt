@@ -70,7 +70,8 @@ Deno.test("commonMarkDocToString - with front matter", () => {
     markdown: `# Hello World
 
 This is a test document.`,
-  };
+    changed: false
+  } as CommonMarkDoc;
 
   const result = commonMarkDocToString(cmarkDoc);
 

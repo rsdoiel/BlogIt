@@ -210,7 +210,6 @@ async function promptToEditFields(
     }
     if (cmarkDoc.frontMatter[key] === undefined) {
       assignValue(cmarkDoc.frontMatter, key, getDefaultValueAsString(cmarkDoc.frontMatter, key));
-      console.log(`DEBUG assigning default value ${key} of ${cmarkDoc.frontMatter[key]}`);
     }
     // NOTE: draft and pub date are connected. A draft can't have a datePublished
     if (key === 'draft' && cmarkDoc.frontMatter.draft)  {

@@ -164,10 +164,19 @@ function validateFrontMatter(
       switch (field) {
         case "title":
         case "author":
-        case "abstract":
         case "dateCreated":
         case "dateModified":
           return { ok: false, error: `missing ${field}` };
+        case "abstract":
+          if (frontMatter['description'] === undefined) {
+            return { ok: false, error: `missing ${field} (or description)` };
+          }
+          break;
+        case "description":
+          if (frontMatter['abstract'] === undefined) {
+            return { ok: false, error: `missing ${field} (or abstract)` };
+          }
+          break;
         case "draft":
           if (
             frontMatter.datePublished === undefined ||
@@ -191,6 +200,7 @@ function validateFrontMatter(
       switch (field) {
         case "title":
         case "author":
+        case "description":
         case "abstract":
           res = assertType(frontMatter[field], "string");
           if (res.ok) {
@@ -207,6 +217,7 @@ function validateFrontMatter(
         case "draft":
           res = assertType(frontMatter[field], "boolean");
           break;
+        case "pubDate":
         case "datePublished":
           if (frontMatter[field] !== "") {
             res = assertType(frontMatter[field], "string", "date");

@@ -1,5 +1,5 @@
 #!/bin/bash
-# generated with CMTools 0.0.1 1ac9e32
+# generated with CMTools 0.0.4 5c61ac4
 
 #
 # Release script for BlogIt on GitHub using gh cli.

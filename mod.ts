@@ -33,7 +33,7 @@ import { helpText, fmtHelp } from "./helptext.ts";
 
 
 async function main() {
-  const appName = 'BlogIt';
+  const appName = 'blogit';
   const args = parseArgs(Deno.args, {
     boolean: ["help", "version", "license", "draft", "check", "edit", "publish", "process", "show" ],
     string: ["prefix", "apply"],

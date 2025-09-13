@@ -19,15 +19,15 @@
 </nav>
 <section>
 <h1 id="name">NAME</h1>
-<p>BlogIt</p>
+<p>blogit</p>
 <h1 id="synopsis">SYNOPSIS</h1>
-<p>BlogIt <a href="#options">OPTIONS</a> COMMONMARK_FILE</p>
+<p>blogit <a href="#options">OPTIONS</a> COMMONMARK_FILE</p>
 <h1 id="description">DESCRIPTION</h1>
-<p>BlogIt provides a means of currating front matter in a CommonMark or
+<p>blogit provides a means of currating front matter in a CommonMark or
 Markdown document. When you’re ready to publish (when the front matter
 validates) it’ll copy the document into a blog directory structure.</p>
-<p>You can provides a defaults for front matter for BlogIt by providing
-a YAML file with the name of “BlogIt.yaml”. It will be the default
+<p>You can provides a defaults for front matter for blogit by providing
+a YAML file with the name of “blogit.yaml”. It will be the default
 values for front matter fields.</p>
 <h1 id="options">OPTIONS</h1>
 <p>Options come as the last parameter(s) on the command line.</p>
@@ -86,9 +86,9 @@ tree.
 </dd>
 </dl>
 <h1 id="configuration">CONFIGURATION</h1>
-<p>BlogIt will look for a “BlogIt.yaml” file in the current directory of
-where BlogIt is being executed. The file’s YAML provides minimum front
-matter default values. To apply the defaults from BlogIt.yaml you use
+<p>blogit will look for a “blogit.yaml” file in the current directory of
+where blogit is being executed. The file’s YAML provides minimum front
+matter default values. To apply the defaults from blogit.yaml you use
 the apply action.</p>
 <h1 id="examples">EXAMPLES</h1>
 <h2 id="setting-up-a-blog">Setting up a blog</h2>
@@ -119,7 +119,7 @@ values.</p>
 <li>create a “defaults.yaml” file</li>
 <li>Apply the defaults to the post “FirstPost.md”</li>
 </ol>
-<pre class="shell"><code>BlogIt --apply=defaults.yaml FirstPost.md</code></pre>
+<pre class="shell"><code>blogit --apply=defaults.yaml FirstPost.md</code></pre>
 </section>
 </body>
 </html>

@@ -45,7 +45,7 @@
     "Pandoc >= 3.6"
   ],
   "version": "0.0.4",
-  "developmentStatus": "wip",
+  "developmentStatus": "abandoned",
   "issueTracker": "https://github.com/rsdoiel/BlogIt/issues",
   "releaseNotes": "Added support for description, postPath, pubDate in front matter for compatibility with antennaApp.",
   "copyrightYear": 2025,

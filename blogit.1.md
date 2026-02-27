@@ -1,4 +1,4 @@
-%BlogIt(1) user manual | version 0.0.4 6d71884
+%BlogIt(1) user manual | version 0.0.4 5c61ac4
 % R. S. Doiel
 % 2025-09-11
 

@@ -37,7 +37,7 @@ maintainer:
     id: https://orcid.org/0000-0003-0900-6903
 
 repository_code: https://github.com/rsdoiel/BlogIt
-version: 0.0.4
+version: 0.0.5
 license_url: https://www.gnu.org/licenses/agpl-3.0.html#license-text
 
 programming_language:
@@ -49,15 +49,15 @@ keywords:
   - CommonMark
   - Markdown
 
-date_released: 2025-09-11
+date_released: 2025-09-13
 ---
 
 About this software
 ===================
 
-## BlogIt 0.0.4
+## BlogIt 0.0.5
 
-Added support for description, postPath, pubDate in front matter for compatibility with antennaApp.
+Added release process, now supporting easy command line install via curl or irm.
 
 ### Authors
 

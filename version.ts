@@ -1,7 +1,12 @@
 // BlogIt version and license information.
 
+<<<<<<< HEAD
 export const version: string = '0.0.4',
 releaseDate: string = '2025-09-11',
+=======
+export const version: string = '0.0.5',
+releaseDate: string = '2025-09-13',
+>>>>>>> 6b582e1f5a8f152f9d7ac2898dc4fea076bf282c
 releaseHash: string = '5c61ac4',
 licenseText: string = `
                     GNU AFFERO GENERAL PUBLIC LICENSE

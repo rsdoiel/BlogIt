@@ -1,14 +1,21 @@
 {
   "tasks": {
-    "build": "deno compile --allow-read --allow-write --allow-env --allow-sys=uid --allow-run --output bin/blogit mod.ts",
+    "build": "deno task version.ts ; deno task compile ; deno task man",
+    "compile": "deno compile --allow-read --allow-write --allow-env --allow-sys=uid --allow-run --output bin/blogit mod.ts",
     "test": "deno test --allow-read --allow-write --allow-env --allow-run",
     "installer.sh": "cmt codemeta.json installer.sh",
     "installer.ps1": "cmt codemeta.json installer.ps1",
     "INSTALL.md": "cmt codemeta.json INSTALL.md",
-    "gen-code": "deno task build.ps1",
-    "website.mak": "cmt codemeta.json website.mak",
-    "Makefile": "cmt codemeta.json Makefile",
-    "build.ps1": "cmt codemeta.json build.ps1"
+    "version.ts": "cmt codemeta.json version.ts",
+    "CITATION.cff": "cmt codemeta.json CITATION.cff",
+    "about.md": "cmt codemeta.json about.md",
+    "man": "./bin/blogit --help >blogit.1.md",
+    "dist_linux_x86_64": "deno compile --target x86_64-unknown-linux-gnu --allow-read --allow-write --allow-env --allow-sys=uid --allow-run --output dist/bin/blogit mod.ts",
+    "dist_linux_aarch64": "deno compile --target aarch64-unknown-linux-gnu --allow-read --allow-write --allow-env --allow-sys=uid --allow-run --output dist/bin/blogit mod.ts",
+    "dist_macos_x86_64": "deno compile --target x86_64-apple-darwin --allow-read --allow-write --allow-env --allow-sys=uid --allow-run --output dist/bin/blogit mod.ts",
+    "dist_macos_aarch64": "deno compile --target aarch64-apple-darwin --allow-read --allow-write --allow-env --allow-sys=uid --allow-run --output dist/bin/blogit mod.ts",
+    "dist_windows_x86_64": "deno compile --target x86_64-pc-windows-msvc --allow-read --allow-write --allow-env --allow-sys=uid --allow-run --output dist/bin/blogit.exe mod.ts",
+    "dist_windows_aarch64": "deno compile --target x86_64-pc-windows-msvc --allow-read --allow-write --allow-env --allow-sys=uid --allow-run --output dist/bin/blogit.exe mod.ts",
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.14",

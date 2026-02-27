@@ -1,5 +1,5 @@
 
-# generated with CMTools 0.0.1 b93a149e
+# generated with CMTools 0.0.40 2025-08-06 72865be
 
 #
 # Simple Makefile for Deno based Projects built under POSIX.
@@ -13,7 +13,7 @@ PROGRAMS = blogit
 
 GIT_GROUP = rsdoiel
 
-VERSION = $(shell grep '"version":' codemeta.json | cut -d"  -f 4)
+VERSION = $(shell grep '"version":' codemeta.json | cut -d\"  -f 4)
 
 BRANCH = $(shell git branch | grep '* ' | cut -d  -f 2)
 
@@ -49,12 +49,11 @@ bin: .FORCE
 
 compile: .FORCE
 	deno task build
-	./bin/blogit --help >blogit.1.md
 
 check: .FORCE
 	deno task check
 
-version.ts: codemeta.json
+version.ts: .FORCE
 	cmt codemeta.json version.ts
 
 format: $(shell ls -1 *.ts | grep -v version.ts | grep -v deps.ts)
@@ -69,10 +68,10 @@ $(MAN_PAGES_1): .FORCE
 	pandoc $@.md --from markdown --to man -s >man/man1/$@
 
 CITATION.cff: codemeta.json
-	cmt codemeta.json CITATION.cff
+	deno task CITATION.cff
 
 about.md: codemeta.json
-	cmt codemeta.json about.md
+	deno task about.md
 
 status:
 	git status
@@ -87,10 +86,15 @@ website: $(HTML_PAGES) .FORCE
 publish: website .FORCE
 	./publish.bash
 
+htdocs: .FORCE
+	deno task htdocs
+	deno task transpile
+
 test: .FORCE
 	deno task test
+	#deno task editor_test.ts
 
-install: build
+install: build man
 	@echo "Installing programs in $(PREFIX)/bin"
 	@for FNAME in $(PROGRAMS); do if [ -f "./bin/$${FNAME}$(EXT)" ]; then mv -v "./bin/$${FNAME}$(EXT)" "$(PREFIX)/bin/$${FNAME}$(EXT)"; fi; done
 	@echo ""
@@ -128,7 +132,7 @@ clean:
 	if [ -d dist ]; then rm -fR dist/*; fi
 
 release: clean build man website distribute_docs dist/Linux-x86_64 dist/Linux-aarch64 dist/macOS-x86_64 dist/macOS-arm64 dist/Windows-x86_64 dist/Windows-arm64
-	echo "Ready to do ./release.bash"
+	@printf "\n\nReady to do\n\n\t./release.bash\n\n"
 
 setup_dist: .FORCE
 	@rm -fR dist
@@ -146,38 +150,37 @@ distribute_docs: website man setup_dist
 dist/Linux-x86_64: .FORCE
 	@mkdir -p dist/bin
 	deno task dist_linux_x86_64
-	@cd dist && zip -r $(PROJECT)-v$(VERSION)-Linux-x86_64.zip LICENSE codemeta.json CITATION.cff *.md bin/*
+	@cd dist && zip -r $(PROJECT)-v$(VERSION)-Linux-x86_64.zip LICENSE codemeta.json CITATION.cff *.md bin/* man/*
 	@rm -fR dist/bin
 
 dist/Linux-aarch64: .FORCE
 	@mkdir -p dist/bin
 	deno task dist_linux_aarch64
-	@cd dist && zip -r $(PROJECT)-v$(VERSION)-Linux-aarch64.zip LICENSE codemeta.json CITATION.cff *.md bin/*
+	@cd dist && zip -r $(PROJECT)-v$(VERSION)-Linux-aarch64.zip LICENSE codemeta.json CITATION.cff *.md bin/* man/*
 	@rm -fR dist/bin
 
 dist/macOS-x86_64: .FORCE
 	@mkdir -p dist/bin
 	deno task dist_macos_x86_64
-	@cd dist && zip -r $(PROJECT)-v$(VERSION)-macOS-x86_64.zip LICENSE codemeta.json CITATION.cff *.md bin/*
+	@cd dist && zip -r $(PROJECT)-v$(VERSION)-macOS-x86_64.zip LICENSE codemeta.json CITATION.cff *.md bin/* man/*
 	@rm -fR dist/bin
 
 dist/macOS-arm64: .FORCE
 	@mkdir -p dist/bin
 	deno task dist_macos_aarch64
-	@cd dist && zip -r $(PROJECT)-v$(VERSION)-macOS-arm64.zip LICENSE codemeta.json CITATION.cff *.md bin/*
+	@cd dist && zip -r $(PROJECT)-v$(VERSION)-macOS-arm64.zip LICENSE codemeta.json CITATION.cff *.md bin/* man/*
 	@rm -fR dist/bin
 
 dist/Windows-x86_64: .FORCE
 	@mkdir -p dist/bin
 	deno task dist_windows_x86_64
-	@cd dist && zip -r $(PROJECT)-v$(VERSION)-Windows-x86_64.zip LICENSE codemeta.json CITATION.cff *.md bin/*
+	@cd dist && zip -r $(PROJECT)-v$(VERSION)-Windows-x86_64.zip LICENSE codemeta.json CITATION.cff *.md bin/* man/*
 	@rm -fR dist/bin
 
 dist/Windows-arm64: .FORCE
 	@mkdir -p dist/bin
-	#deno task dist_windows_aarch64 <-- switch to native when Rust/Deno supports Windows ARM64
-	deno task dist_windows_x86_64
-	@cd dist && zip -r $(PROJECT)-v$(VERSION)-Windows-arm64.zip LICENSE codemeta.json CITATION.cff *.md bin/*
+	deno task dist_windows_aarch64
+	@cd dist && zip -r $(PROJECT)-v$(VERSION)-Windows-arm64.zip LICENSE codemeta.json CITATION.cff *.md bin/* man/*
 	@rm -fR dist/bin
 
 .FORCE:

@@ -1,11 +1,15 @@
 #!/bin/sh
+<<<<<<< HEAD
 # generated with CMTools 0.0.4 5c61ac4
+=======
+# generated with CMTools 0.0.5 5c61ac4
+>>>>>>> 6b582e1f5a8f152f9d7ac2898dc4fea076bf282c
 
 #
 # Set the package name and version to install
 #
 PACKAGE="BlogIt"
-VERSION="0.0.4"
+VERSION="0.0.5"
 GIT_GROUP="rsdoiel"
 RELEASE="https://github.com/$GIT_GROUP/$PACKAGE/releases/tag/v$VERSION"
 if [ "$PKG_VERSION" != "" ]; then

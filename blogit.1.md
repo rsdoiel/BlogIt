@@ -1,23 +1,27 @@
+<<<<<<< HEAD
 %BlogIt(1) user manual | version 0.0.4 5c61ac4
+=======
+%blogit(1) user manual | version 0.0.5 5c61ac4
+>>>>>>> 6b582e1f5a8f152f9d7ac2898dc4fea076bf282c
 % R. S. Doiel
-% 2025-09-11
+% 2025-09-13
 
 # NAME
 
-BlogIt
+blogit
 
 # SYNOPSIS
 
-BlogIt [OPTIONS] COMMONMARK_FILE
+blogit [OPTIONS] COMMONMARK_FILE
 
 # DESCRIPTION
 
-BlogIt provides a means of currating front matter in a CommonMark or Markdown
+blogit provides a means of currating front matter in a CommonMark or Markdown
 document. When you're ready to publish (when the front matter validates) it'll copy
 the document into a blog directory structure.
 
-You can provides a defaults for front matter for BlogIt by providing a YAML
-file with the name of "BlogIt.yaml". It will be the default values for front matter
+You can provides a defaults for front matter for blogit by providing a YAML
+file with the name of "blogit.yaml". It will be the default values for front matter
 fields.
 
 # OPTIONS
@@ -61,8 +65,8 @@ to run the pre-processor on the file before writing to the directory tree.
 
 # CONFIGURATION
 
-BlogIt will look for a "BlogIt.yaml" file in the current directory of where BlogIt is being executed.
-The file's YAML provides minimum front matter default values. To apply the defaults from BlogIt.yaml you use the
+blogit will look for a "blogit.yaml" file in the current directory of where blogit is being executed.
+The file's YAML provides minimum front matter default values. To apply the defaults from blogit.yaml you use the
 apply action.
 
 # EXAMPLES
@@ -100,7 +104,7 @@ Here is an example of using the "apply" action front matter values.
 2. Apply the defaults to the post "FirstPost.md"
 
 ~~~shell
-BlogIt --apply=defaults.yaml FirstPost.md
+blogit --apply=defaults.yaml FirstPost.md
 ~~~
 
 
